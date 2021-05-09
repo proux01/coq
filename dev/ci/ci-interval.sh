@@ -5,5 +5,7 @@ ci_dir="$(dirname "$0")"
 
 git_download interval
 
-export COQEXTRAFLAGS='-native-compiler no'
+ulimit -s
+ulimit -s 65536
+ulimit -s
 ( cd "${CI_BUILD_DIR}/interval" && ( if [ ! -x ./configure ]; then autoconf && ./configure; fi ) && ./remake "-j${NJOBS}" && ./remake install )
