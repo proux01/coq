@@ -682,10 +682,10 @@ library:ci-coq_tools:
 
 library:ci-coqprime:
   stage: stage-3
-  extends: .ci-template-flambda
+  extends: .ci-template
   needs:
-  - build:edge+flambda
-  - plugin:ci-bignums
+  - build:base
+  - plugin:ci-bignums-base
 
 library:ci-coqtail:
   extends: .ci-template
@@ -711,12 +711,12 @@ library:ci-fcsl_pcm:
   - library:ci-mathcomp
 
 library:ci-fiat_crypto:
-  extends: .ci-template-flambda
+  extends: .ci-template
   stage: stage-4
   needs:
-  - build:edge+flambda
+  - build:base
   - library:ci-coqprime
-  - plugin:ci-bignums
+  - plugin:ci-bignums-base
   - plugin:ci-rewriter
 
 library:ci-fiat_crypto_legacy:
@@ -730,9 +730,9 @@ library:ci-fiat_crypto_ocaml:
   extends: .ci-template
   stage: stage-5
   needs:
-  - build:edge+flambda
+  - build:base
   - library:ci-coqprime
-  - plugin:ci-bignums
+  - plugin:ci-bignums-base
   - plugin:ci-rewriter
   - library:ci-fiat_crypto
 
@@ -848,6 +848,9 @@ plugin:ci-aac_tactics:
 plugin:ci-bignums:
   extends: .ci-template-flambda
 
+plugin:ci-bignums-base:
+  extends: .ci-template
+
 plugin:ci-coq_dpdgraph:
   extends: .ci-template
 
@@ -903,4 +906,4 @@ plugin:ci-relation_algebra:
   extends: .ci-template
 
 plugin:ci-rewriter:
-  extends: .ci-template-flambda
+  extends: .ci-template
