@@ -466,7 +466,7 @@ Notation Rabs_Rinv := Rabs_Rinv_depr.
 
 Lemma Rabs_Ropp : forall x:R, Rabs (- x) = Rabs x.
 Proof.
-  intro; replace (-x) with (-1 * x) by ring.
+  intro; replace (-x) with ((-1) * x) by ring.
   rewrite Rabs_mult.
   replace (Rabs (-1)) with 1.
   - apply Rmult_1_l.

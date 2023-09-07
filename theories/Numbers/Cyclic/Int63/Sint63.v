@@ -192,7 +192,7 @@ Proof.
     rewrite Z_mod_nz_opp_full.
     + rewrite Z.mod_small by apply Uint63.to_Z_bounded.
       rewrite <- (Z_mod_plus_full _ (-1)).
-      change (-1 * wB) with (- (wB / 2) - wB / 2).
+      change ((-1) * wB) with (- (wB / 2) - wB / 2).
       rewrite <- Z.add_assoc, Zplus_minus.
       rewrite Z.mod_small.
       * change wB with (wB / 2 + wB / 2) at 1; lia.

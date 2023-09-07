@@ -724,7 +724,7 @@ Proof. now intros r1 r2 H1 H2; apply Rmult_integral_contrapositive. Qed.
 (** ** Opposite and multiplication                       *)
 (*********************************************************)
 
-Lemma Ropp_mult_distr_l : forall r1 r2, - (r1 * r2) = - r1 * r2.
+Lemma Ropp_mult_distr_l : forall r1 r2, - (r1 * r2) = (- r1) * r2.
 Proof.
   intros r1 r2; symmetry; apply Rplus_opp_r_uniq.
   now rewrite <-Rmult_plus_distr_r, Rplus_opp_r, Rmult_0_l.
@@ -733,12 +733,12 @@ Qed.
 Lemma Ropp_mult_distr_r : forall r1 r2, - (r1 * r2) = r1 * - r2.
 Proof. now intros r1 r2; rewrite 2(Rmult_comm r1); apply Ropp_mult_distr_l. Qed.
 
-Lemma Ropp_mult_distr_l_reverse : forall r1 r2, - r1 * r2 = - (r1 * r2).
+Lemma Ropp_mult_distr_l_reverse : forall r1 r2, (- r1) * r2 = - (r1 * r2).
 Proof. now intros r1 r2; symmetry; apply Ropp_mult_distr_l. Qed.
 #[global]
 Hint Resolve Ropp_mult_distr_l_reverse: real.
 
-Lemma Rmult_opp_opp : forall r1 r2, - r1 * - r2 = r1 * r2.
+Lemma Rmult_opp_opp : forall r1 r2, (- r1) * (- r2) = r1 * r2.
 Proof.
   intros r1 r2.
   now rewrite <-Ropp_mult_distr_l, <-Ropp_mult_distr_r, Ropp_involutive.
@@ -746,7 +746,7 @@ Qed.
 #[global]
 Hint Resolve Rmult_opp_opp: real.
 
-Lemma Ropp_mult_distr_r_reverse : forall r1 r2, r1 * - r2 = - (r1 * r2).
+Lemma Ropp_mult_distr_r_reverse : forall r1 r2, r1 * (- r2) = - (r1 * r2).
 Proof. now intros r1 r2; symmetry; apply Ropp_mult_distr_r. Qed.
 
 (*********************************************************)
@@ -954,7 +954,7 @@ destruct (Req_dec r1 0) as [-> | H1].
     now rewrite Rinv_r, Rmult_1_l, Rinv_r.
 Qed.
 
-Lemma Rinv_opp r : / - r = - / r.
+Lemma Rinv_opp r : / (- r) = - / r.
 Proof.
   destruct (Req_dec r 0) as [-> | H].
   - now rewrite Ropp_0, Rinv_0, Ropp_0.
@@ -1889,10 +1889,10 @@ Proof.
   now intros r r1 r2; rewrite (Rmult_comm r1); apply Rdiv_mult_l_l.
 Qed.
 
-Lemma Ropp_div_distr_l : forall r1 r2, - (r1 / r2) = - r1 / r2.
+Lemma Ropp_div_distr_l : forall r1 r2, - (r1 / r2) = (- r1) / r2.
 Proof. unfold Rdiv; intros r1 r2; now apply Ropp_mult_distr_l. Qed.
 
-Lemma Ropp_div_distr_r : forall r1 r2, r1 / - r2 = - (r1 / r2).
+Lemma Ropp_div_distr_r : forall r1 r2, r1 / (- r2) = - (r1 / r2).
 Proof. now unfold Rdiv; intros r1 r2; rewrite Ropp_mult_distr_r, Rinv_opp. Qed.
 
 (* NOTE: keeping inconsistent variable names for backward compatibility. *)
@@ -1917,11 +1917,11 @@ Proof.
   now apply (Rmult_lt_0_compat r1 (/ r2) r1_pos), Rinv_0_lt_compat.
 Qed.
 
-Lemma Rdiv_opp_l : forall r1 r2, - r1 / r2 = - (r1 / r2).
+Lemma Rdiv_opp_l : forall r1 r2, (- r1) / r2 = - (r1 / r2).
 Proof. now intros r1 r2; rewrite Ropp_div_distr_l. Qed.
 
 (* NOTE: keeping inconsistent variable names for backward compatibility. *)
-Lemma Rdiv_opp_r : forall x y, x / - y = - (x / y).
+Lemma Rdiv_opp_r : forall x y, x / (- y) = - (x / y).
 Proof. now intros r1 r2; rewrite Ropp_div_distr_r. Qed.
 
 (** *** Sign of division *)
@@ -2735,7 +2735,7 @@ Proof. now intros r H; apply eq_sym, Rinv_opp. Qed.
 #[deprecated(since="8.16",note="Use Rinv_opp.")]
 Notation Ropp_inv_permute := Ropp_inv_permute_depr (only parsing).
 
-Lemma Ropp_div_den_depr : forall x y, y <> 0 -> x / - y = - (x / y).
+Lemma Ropp_div_den_depr : forall x y, y <> 0 -> x / (- y) = - (x / y).
 Proof. now intros r1 r2 _; apply Ropp_div_distr_r. Qed.
 #[deprecated(since="8.16",note="Use Rdiv_opp_r.")]
 Notation Ropp_div_den := Ropp_div_den_depr (only parsing).

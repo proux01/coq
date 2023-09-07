@@ -654,9 +654,9 @@ Proof.
   cut (forall n:nat, Un (S n) < Un n).
   { intro; simpl in |- *.
     repeat rewrite Rmult_1_l; repeat rewrite Rmult_1_r;
-      replace (-1 * Un 1%nat) with (- Un 1%nat); [ idtac | ring ];
-      replace (-1 * -1 * Un 2%nat) with (Un 2%nat); [ idtac | ring ];
-      replace (-1 * (-1 * -1) * Un 3%nat) with (- Un 3%nat);
+      replace ((-1) * Un 1%nat) with (- Un 1%nat); [ idtac | ring ];
+      replace ((-1) * (-1) * Un 2%nat) with (Un 2%nat); [ idtac | ring ];
+      replace ((-1) * ((-1) * -1) * Un 3%nat) with (- Un 3%nat);
       [ idtac | ring ];
       replace (Un 0%nat + - Un 1%nat + Un 2%nat + - Un 3%nat) with
       (Un 0%nat - Un 1%nat + (Un 2%nat - Un 3%nat)); [ idtac | ring ].
@@ -885,7 +885,7 @@ Proof.
   intros x H1 H2; unfold tan in |- *;
     generalize (cos_gt_0 x H1 (Rlt_trans x 0 (PI / 2) H2 PI2_RGT_0));
       intro H3; rewrite <- Ropp_0;
-        replace (sin x / cos x) with (- (- sin x / cos x)).
+        replace (sin x / cos x) with (- ((- sin x) / cos x)).
   - rewrite <- sin_neg; apply Ropp_gt_lt_contravar;
       change (0 < sin (- x) / cos x) in |- *; unfold Rdiv in |- *;
       apply Rmult_lt_0_compat.
@@ -1543,7 +1543,7 @@ Proof.
     apply Z2Nat.id.
     lia.
   - replace (IZR k) with (- INR (Z.to_nat (- k))).
-    { replace (- INR (Z.to_nat (- k)) * PI) with (- (INR (Z.to_nat (- k)) * PI)) by ring.
+    { replace ((- INR (Z.to_nat (- k))) * PI) with (- (INR (Z.to_nat (- k)) * PI)) by ring.
       rewrite sin_neg.
       rewrite H;ring. }
     rewrite INR_IZR_INZ.

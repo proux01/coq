@@ -454,7 +454,7 @@ Proof.
 
   (* Massage the goal so that CReal_of_DReal_seq_bound can be applied *)
   apply (Qplus_lt_l _ _ (-Qabs (CReal_of_DReal_seq x (-1)))%Q); ring_simplify.
-  assert(forall r s : Q, (r + -1*s == r-s)%Q) as Aux
+  assert(forall r s : Q, (r + (-1)*s == r-s)%Q) as Aux
     by (intros; lra); rewrite Aux; clear Aux.
   apply (Qle_lt_trans _ _ _ (Qabs_triangle_reverse _ _)).
   apply (Qle_lt_trans _ 1%Q _).

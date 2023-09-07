@@ -247,7 +247,7 @@ Proof.
   }
   set (delta := mkposreal _ H6).
   exists delta; intros.
-  rewrite Rplus_0_l; replace (cos h - cos 0) with (-2 * Rsqr (sin (h / 2))).
+  rewrite Rplus_0_l; replace (cos h - cos 0) with ((-2) * Rsqr (sin (h / 2))).
   2:{ pattern h at 2; replace h with (2 * (h / 2)) by field.
       rewrite (cos_2a_sin (h / 2)).
       rewrite cos_0; unfold Rsqr; ring. }

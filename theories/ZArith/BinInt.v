@@ -274,7 +274,7 @@ Qed.
 
 (** ** Multiplication and Opposite *)
 
-Lemma mul_opp_r n m : n * - m = - (n * m).
+Lemma mul_opp_r n m : n * (- m) = - (n * m).
 Proof.
  now destruct n, m.
 Qed.
@@ -1811,7 +1811,7 @@ Lemma Zmult_integral : forall n m, n * m = 0 -> n = 0 \/ m = 0.
 Proof (fun n m => proj1 (Z.mul_eq_0 n m)).
 Lemma Zmult_integral_l : forall n m, n <> 0 -> m * n = 0 -> m = 0.
 Proof (fun n m H H' => Z.mul_eq_0_l m n H' H).
-Lemma Zopp_mult_distr_l : forall n m, - (n * m) = - n * m.
+Lemma Zopp_mult_distr_l : forall n m, - (n * m) = (- n) * m.
 Proof (SYM2 Z.mul_opp_l).
 Lemma Zopp_mult_distr_r : forall n m, - (n * m) = n * - m.
 Proof (SYM2 Z.mul_opp_r).

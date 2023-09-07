@@ -39,7 +39,7 @@ Proof.
   replace (f1 x * (/ f2 x * / f2 (x + h)) * (f2 (x + h) * / h)) with
   (f1 x * / f2 x * / h * (f2 (x + h) * / f2 (x + h)));
   [ idtac | ring ].
-  replace (f1 x * (/ f2 x * / f2 (x + h)) * (- f2 x * / h)) with
+  replace (f1 x * (/ f2 x * / f2 (x + h)) * ((- f2 x) * / h)) with
   (- (f1 x * / f2 (x + h) * / h * (f2 x * / f2 x)));
   [ idtac | ring ].
   replace (l2 * f1 x * (/ f2 x * / f2 x * / f2 (x + h)) * f2 (x + h)) with

@@ -36,7 +36,7 @@ Proof.
       rewrite Rmult_1_l.
     apply Rplus_le_reg_l with (Un (S (2 * S n))).
     rewrite Rplus_0_r;
-      replace (Un (S (2 * S n)) + (Un (2 * S n)%nat + -1 * Un (S (2 * S n)))) with
+      replace (Un (S (2 * S n)) + (Un (2 * S n)%nat + (-1) * Un (S (2 * S n)))) with
       (Un (2 * S n)%nat); [ idtac | ring ].
     apply H.
   - cut (forall n:nat, S n = (n + 1)%nat); [ intro | intro; ring ].
@@ -57,7 +57,7 @@ Proof.
       rewrite Rmult_1_l.
     apply Rplus_le_reg_l with (Un (S (2 * n))).
     rewrite Rplus_0_r;
-      replace (Un (S (2 * n)) + (-1 * Un (S (2 * n)) + Un (2 * S n)%nat)) with
+      replace (Un (S (2 * n)) + ((-1) * Un (S (2 * n)) + Un (2 * S n)%nat)) with
       (Un (2 * S n)%nat); [ idtac | ring ].
     rewrite H0; apply H.
   - cut (forall n:nat, S n = (n + 1)%nat); [ intro | intro; ring ].
@@ -73,9 +73,9 @@ Lemma CV_ALT_step2 :
 Proof.
   intros; induction  N as [| N HrecN].
   - simpl; unfold tg_alt; simpl; rewrite Rmult_1_r.
-    replace (-1 * -1 * Un 2%nat) with (Un 2%nat); [ idtac | ring ].
+    replace ((-1) * (-1) * Un 2%nat) with (Un 2%nat); [ idtac | ring ].
     apply Rplus_le_reg_l with (Un 1%nat); rewrite Rplus_0_r.
-    replace (Un 1%nat + (-1 * Un 1%nat + Un 2%nat)) with (Un 2%nat);
+    replace (Un 1%nat + ((-1) * Un 1%nat + Un 2%nat)) with (Un 2%nat);
       [ apply H | ring ].
   - cut (S (2 * S N) = S (S (S (2 * N)))).
     + intro; rewrite H1; do 2 rewrite tech5.
@@ -89,7 +89,7 @@ Proof.
         -- intro; rewrite H2; rewrite pow_1_even; rewrite Rmult_1_l; rewrite <- H2.
            apply Rplus_le_reg_l with (Un (S (2 * S N))).
            rewrite Rplus_0_r;
-             replace (Un (S (2 * S N)) + (-1 * Un (S (2 * S N)) + Un (S (S (2 * S N)))))
+             replace (Un (S (2 * S N)) + ((-1) * Un (S (2 * S N)) + Un (S (S (2 * S N)))))
              with (Un (S (S (2 * S N)))); [ idtac | ring ].
            apply H.
         -- ring.
@@ -106,7 +106,7 @@ Proof.
   intros; induction  N as [| N HrecN].
   - simpl; unfold tg_alt; simpl; rewrite Rmult_1_r.
     apply Rplus_le_reg_l with (Un 1%nat).
-    rewrite Rplus_0_r; replace (Un 1%nat + -1 * Un 1%nat) with 0;
+    rewrite Rplus_0_r; replace (Un 1%nat + (-1) * Un 1%nat) with 0;
       [ apply H0 | ring ].
   - assert (H1 := even_odd_cor N).
     elim H1; intros.
@@ -120,7 +120,7 @@ Proof.
         unfold tg_alt; simpl.
         replace (x + (x + 0))%nat with (2 * x)%nat; [ idtac | ring ].
         rewrite pow_1_even.
-        replace (-1 * (-1 * (-1 * 1)) * Un (S (S (S (2 * x))))) with
+        replace ((-1) * ((-1) * ((-1) * 1)) * Un (S (S (S (2 * x))))) with
           (- Un (S (S (S (2 * x))))); [ idtac | ring ].
         apply Rplus_le_reg_l with (Un (S (S (S (2 * x))))).
         rewrite Rplus_0_r; rewrite Rplus_opp_r.
@@ -405,7 +405,7 @@ Proof.
     + simpl; unfold tg_alt; simpl; rewrite Rmult_1_l;
         rewrite Rmult_1_r; apply Rplus_lt_reg_l with (PI_tg 1).
       rewrite Rplus_0_r;
-        replace (PI_tg 1 + (PI_tg 0 + -1 * PI_tg 1)) with (PI_tg 0);
+        replace (PI_tg 1 + (PI_tg 0 + (-1) * PI_tg 1)) with (PI_tg 0);
         [ unfold PI_tg | ring ].
       simpl; apply Rinv_lt_contravar.
       * rewrite Rmult_1_l; replace (2 + 1) with 3; [ prove_sup0 | ring ].

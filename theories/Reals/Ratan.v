@@ -213,7 +213,7 @@ Qed.
 
 (** *** Derivative of tangent *)
 
-Lemma derivable_pt_tan : forall x, -PI/2 < x < PI/2 ->
+Lemma derivable_pt_tan : forall x, (-PI)/2 < x < PI/2 ->
   derivable_pt tan x.
 Proof.
 intros x xint.
@@ -221,11 +221,11 @@ intros x xint.
  apply derivable_pt_div ; [reg | reg | ].
  apply Rgt_not_eq.
  unfold Rgt ; apply cos_gt_0;
-  [unfold Rdiv; rewrite <- Ropp_mult_distr_l_reverse; fold (-PI/2) |];tauto.
+  [unfold Rdiv; rewrite <- Ropp_mult_distr_l_reverse; fold ((-PI)/2) |];tauto.
 Qed.
 
 Lemma derive_pt_tan : forall x,
- forall (Pr1: -PI/2 < x < PI/2),
+ forall (Pr1: (-PI)/2 < x < PI/2),
  derive_pt tan x (derivable_pt_tan x Pr1) = 1 + (tan x)^2.
 Proof.
 intros x pr.
@@ -330,18 +330,18 @@ Lemma PI2_1 : 1 < PI/2.
 Proof. assert (t := PI2_3_2); lra. Qed.
 
 Lemma tan_increasing : forall x y,
-  -PI/2 < x -> x < y -> y < PI/2 ->
+  (-PI)/2 < x -> x < y -> y < PI/2 ->
   tan x < tan y.
 Proof.
 intros x y Z_le_x x_lt_y y_le_1.
-assert (x_encad : -PI/2 < x < PI/2).
+assert (x_encad : (-PI)/2 < x < PI/2).
 { split ; [assumption | apply Rlt_trans with (r2:=y) ; assumption]. }
-assert (y_encad : -PI/2 < y < PI/2).
+assert (y_encad : (-PI)/2 < y < PI/2).
 { split ; [apply Rlt_trans with (r2:=x) ; intuition | intuition ]. }
-assert (local_derivable_pt_tan : forall x, -PI/2 < x < PI/2 ->
+assert (local_derivable_pt_tan : forall x, (-PI)/2 < x < PI/2 ->
                                       derivable_pt tan x).
 { intros ; apply derivable_pt_tan ; intuition. }
-apply derive_increasing_interv with (a:=-PI/2) (b:=PI/2) (pr:=local_derivable_pt_tan) ; intuition.
+apply derive_increasing_interv with (a:=(-PI)/2) (b:=PI/2) (pr:=local_derivable_pt_tan) ; intuition.
 { lra. }
 assert (Temp := pr_nu tan t (derivable_pt_tan t t_encad) (local_derivable_pt_tan t t_encad)) ;
   rewrite <- Temp ; clear Temp.
@@ -351,7 +351,7 @@ Qed.
 
 
 Lemma tan_inj : forall x y,
-  -PI/2 < x < PI/2 -> -PI/2 < y < PI/2 ->
+  (-PI)/2 < x < PI/2 -> (-PI)/2 < y < PI/2 ->
   tan x = tan y ->
   x = y.
 Proof.
@@ -367,7 +367,7 @@ Qed.
 Notation tan_is_inj := tan_inj (only parsing). (* compat *)
 
 Lemma exists_atan_in_frame : forall lb ub y,
-  lb < ub -> -PI/2 < lb -> ub < PI/2 ->
+  lb < ub -> (-PI)/2 < lb -> ub < PI/2 ->
   tan lb < y < tan ub ->
   {x | lb < x < ub /\ tan x = y}.
 Proof.
@@ -521,7 +521,7 @@ apply Rlt_trans with (/2 * / cos(PI / 2 - u)).
   + assumption.
 Qed.
 
-Lemma ub_opp : forall x, x < PI/2 -> -PI/2 < -x.
+Lemma ub_opp : forall x, x < PI/2 -> (-PI)/2 < -x.
 Proof.
 intros x h; rewrite Rdiv_opp_l; apply Ropp_lt_contravar; assumption.
 Qed.
@@ -534,7 +534,7 @@ Proof.
 intros; rewrite tan_neg; assumption.
 Qed.
 
-Definition pre_atan (y : R) : {x : R | -PI/2 < x < PI/2 /\ tan x = y}.
+Definition pre_atan (y : R) : {x : R | (-PI)/2 < x < PI/2 /\ tan x = y}.
 Proof.
 destruct (frame_tan y) as [ub [[ub0 ubpi2] Ptan_ub]].
 set (pr := (conj (tech_opp_tan _ _ (proj2 (Rabs_def2 _ _ Ptan_ub)))
@@ -548,7 +548,7 @@ Qed.
 Definition atan x := let (v, _) := pre_atan x in v.
 
 Lemma atan_bound : forall x,
-  -PI/2 < atan x < PI/2.
+  (-PI)/2 < atan x < PI/2.
 Proof.
 intros x; unfold atan; destruct (pre_atan x) as [v [int _]]; exact int.
 Qed.
@@ -656,7 +656,7 @@ Qed.
 Lemma atan_1 : atan 1 = PI/4.
 Proof.
 assert (ut := PI_RGT_0).
-assert (-PI/2 < PI/4 < PI/2) by (rewrite Rdiv_opp_l; split; lra).
+assert ((-PI)/2 < PI/4 < PI/2) by (rewrite Rdiv_opp_l; split; lra).
 assert (t := atan_bound 1).
 apply tan_inj; auto.
 rewrite tan_PI4, tan_atan; reflexivity.
@@ -905,7 +905,7 @@ Lemma sum_Ratan_seq_opp : forall x n,
   sum_f_R0 (tg_alt (Ratan_seq (- x))) n = - sum_f_R0 (tg_alt (Ratan_seq x)) n.
 Proof.
 intros x n; replace (-sum_f_R0 (tg_alt (Ratan_seq x)) n) with
-  (-1 * sum_f_R0 (tg_alt (Ratan_seq x)) n) by ring.
+  ((-1) * sum_f_R0 (tg_alt (Ratan_seq x)) n) by ring.
 rewrite scal_sum; apply sum_eq; intros i _; unfold tg_alt.
 rewrite Ratan_seq_opp; ring.
 Qed.
@@ -921,7 +921,7 @@ destruct (ps_atan_exists_01 _ pr) as [v Pv].
 exists (-v).
 apply (Un_cv_ext (fun n => (- 1) * sum_f_R0 (tg_alt (Ratan_seq (- x))) n)).
 { intros n; rewrite sum_Ratan_seq_opp; ring. }
-replace (-v) with (-1 * v) by ring.
+replace (-v) with ((-1) * v) by ring.
 apply CV_mult;[ | assumption].
 solve[intros; exists 0%nat; intros; rewrite Rdist_eq; auto].
 Qed.
@@ -963,13 +963,13 @@ Lemma ps_atan_exists_1_opp : forall x h h',
 Proof.
 intros x h h'; destruct (ps_atan_exists_1 (-x) h) as [v Pv].
 destruct (ps_atan_exists_1 x h') as [u Pu]; simpl.
-assert (Pu' : Un_cv (fun N => (-1) * sum_f_R0 (tg_alt (Ratan_seq x)) N) (-1 * u)).
+assert (Pu' : Un_cv (fun N => (-1) * sum_f_R0 (tg_alt (Ratan_seq x)) N) ((-1) * u)).
 { apply CV_mult;[ | assumption].
   intros eps ep; exists 0%nat; intros; rewrite Rdist_eq; assumption. }
 assert (Pv' : Un_cv
-                (fun N : nat => -1 * sum_f_R0 (tg_alt (Ratan_seq x)) N) v).
+                (fun N : nat => (-1) * sum_f_R0 (tg_alt (Ratan_seq x)) N) v).
 { apply Un_cv_ext with (2 := Pv); intros n; rewrite sum_Ratan_seq_opp; ring. }
-replace (-u) with (-1 * u) by ring.
+replace (-u) with ((-1) * u) by ring.
 apply UL_sequence with (1:=Pv') (2:= Pu').
 Qed.
 
@@ -1605,7 +1605,7 @@ assert (0 < PI/6) by (apply PI6_RGT_0).
 assert (t1:= PI2_1).
 assert (t2 := PI_4).
 assert (m := Alt_PI_RGT_0).
-assert (-PI/2 < 1 < PI/2) by (rewrite Rdiv_opp_l; split; lra).
+assert ((-PI)/2 < 1 < PI/2) by (rewrite Rdiv_opp_l; split; lra).
 apply cond_eq; intros eps ep.
 change (Rdist (Alt_PI/4) (PI/4) < eps).
 assert (ca : continuity_pt atan 1).
@@ -1832,7 +1832,7 @@ Lemma derivable_pt_asin : forall x, -1 < x < 1 ->
 Proof.
   intros x H.
 
-  eapply (derivable_pt_recip_interv sin asin (-PI/2) (PI/2)); [shelve ..|].
+  eapply (derivable_pt_recip_interv sin asin ((-PI)/2) (PI/2)); [shelve ..|].
 
   rewrite <- (pr_nu sin (asin x) (derivable_pt_sin (asin x))).
   rewrite derive_pt_sin.
@@ -1861,7 +1861,7 @@ Lemma derive_pt_asin : forall (x : R) (Hxrange : -1 < x < 1),
 Proof.
   intros x Hxrange.
 
-  epose proof (derive_pt_recip_interv sin asin (-PI/2) (PI/2) x _ _ _ _ _ _ _) as Hd.
+  epose proof (derive_pt_recip_interv sin asin ((-PI)/2) (PI/2) x _ _ _ _ _ _ _) as Hd.
 
   rewrite <- (pr_nu sin (asin x) (derivable_pt_sin (asin x))) in Hd.
   rewrite <- (pr_nu asin x (derivable_pt_asin x Hxrange)) in Hd.

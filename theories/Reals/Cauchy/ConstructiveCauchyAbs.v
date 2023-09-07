@@ -26,7 +26,7 @@ Local Ltac simplify_Qlt :=
   match goal with |- (?l < ?r)%Q => ring_simplify l; ring_simplify r end.
 
 Local Lemma Qopp_mult_mone : forall q : Q,
-  (-1 * q == -q)%Q.
+  ((-1) * q == -q)%Q.
 Proof.
   intros; ring.
 Qed.
@@ -338,7 +338,7 @@ Proof.
       + ring.
       + apply CRealLt_asym, c0.
       + apply CRealLt_asym, c.
-      + setoid_replace (x*y) with (- x * - y).
+      + setoid_replace (x*y) with ((- x) * - y).
         * apply CRealLt_asym, CReal_mult_lt_0_compat.
           -- rewrite <- CReal_opp_0. apply CReal_opp_gt_lt_contravar, c.
           -- rewrite <- CReal_opp_0. apply CReal_opp_gt_lt_contravar, c0.
@@ -824,7 +824,7 @@ Proof.
     + apply inject_Q_lt; reflexivity.
     + apply CReal_opp_gt_lt_contravar, H.
   - unfold CReal_minus. rewrite CReal_opp_plus_distr, CReal_opp_involutive.
-    rewrite CReal_plus_comm, (CReal_plus_comm (-z*2)), CReal_plus_assoc.
+    rewrite CReal_plus_comm, (CReal_plus_comm ((-z)*2)), CReal_plus_assoc.
     apply CReal_plus_lt_compat_l.
     apply (CReal_plus_lt_reg_r (-y)).
     rewrite CReal_plus_assoc, CReal_plus_opp_r, CReal_plus_0_r.

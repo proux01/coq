@@ -559,7 +559,7 @@ Proof.
 
   (* Massage the goal so that CReal_from_cauchy_seq_bound can be applied *)
   apply (Qplus_lt_l _ _ (-Qabs (CReal_from_cauchy_seq xn xcau (-1)))%Q); ring_simplify.
-  assert(forall x y : Q, (x + -1*y == x-y)%Q) as Aux
+  assert(forall x y : Q, (x + (-1)*y == x-y)%Q) as Aux
     by (intros x y; lra); rewrite Aux; clear Aux.
   apply (Qle_lt_trans _ _ _ (Qabs_triangle_reverse _ _)).
   apply (Qle_lt_trans _ 1%Q _).

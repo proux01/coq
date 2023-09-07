@@ -121,7 +121,7 @@ Section DEFINITIONS.
     ARmul_comm  : forall x y, x * y == y * x;
     ARmul_assoc : forall x y z, x * (y * z) == (x * y) * z;
     ARdistr_l   : forall x y z, (x + y) * z == (x * z) + (y * z);
-    ARopp_mul_l : forall x y, -(x * y) == -x * y;
+    ARopp_mul_l : forall x y, -(x * y) == (-x) * y;
     ARopp_add   : forall x y, -(x + y) == -x + -y;
     ARsub_def   : forall x y, x - y == x + -y
   }.
@@ -353,9 +353,9 @@ Section ALMOST_RING.
     now rewrite (Radd_comm Rth), (Radd_0_l Rth).
  Qed.
 
- Lemma Ropp_mul_l x y : -(x * y) == -x * y.
+ Lemma Ropp_mul_l x y : -(x * y) == (-x) * y.
  Proof.
-  rewrite <-(Radd_0_l Rth (- x * y)).
+  rewrite <-(Radd_0_l Rth ((- x) * y)).
   rewrite (Radd_comm Rth), <-(Ropp_def Rth (x*y)).
   rewrite (Radd_assoc Rth), <- (Rdistr_l Rth).
   rewrite (Radd_comm Rth (-x)), (Ropp_def Rth).

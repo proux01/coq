@@ -1554,7 +1554,7 @@ Proof.
         replace
           ((f (c + Rmax (- (delta * / 2)) ((a - c) * / 2)) - f c) *
              / Rmax (- (delta * / 2)) ((a - c) * / 2)) with
-        (- (f (c + Rmax (- (delta * / 2)) ((a - c) * / 2)) - f c) *
+        ((- (f (c + Rmax (- (delta * / 2)) ((a - c) * / 2)) - f c)) *
              / - Rmax (- (delta * / 2)) ((a - c) * / 2)).
       * apply Rmult_le_pos.
         -- generalize
@@ -1645,7 +1645,7 @@ Proof.
         [ generalize (Rplus_lt_compat_r (- a) a c H); rewrite Rplus_opp_r; intro;
           assumption
         | assert (Hyp : 0 < 2); [ prove_sup0 | apply (Rinv_0_lt_compat 2 Hyp) ] ].
-  - replace (- (l / 2)) with (- l / 2).
+  - replace (- (l / 2)) with ((- l) / 2).
     + unfold Rdiv; apply Rmult_lt_0_compat.
       * rewrite <- Ropp_0; apply Ropp_lt_gt_contravar; assumption.
       * assert (Hyp : 0 < 2); [ prove_sup0 | apply (Rinv_0_lt_compat 2 Hyp) ].

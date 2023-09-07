@@ -2561,7 +2561,7 @@ Section Int31_Specs.
                 assert ([|ih1|] * base + 2 * phi s + 1 <= [|ih|] * base + ([|il|] - [|il1|])).
                 2: lia.
                 rewrite <-Hil2.
-                change (-1 * 2 ^ Z.of_nat size) with (-base).
+                change ((-1) * 2 ^ Z.of_nat size) with (-base).
                 case (phi_bounded il2); intros Hpil2 _.
                 apply Z.le_trans with ([|ih|] * base + - base). 2: lia.
                 case (phi_bounded s);  change (2 ^ Z.of_nat size) with base; intros _ Hps.
@@ -2573,14 +2573,14 @@ Section Int31_Specs.
              split.
              ** replace [|il|] with (([|il|] - [|il1|]) + [|il1|]) by ring.
                 rewrite <-Hil2.
-                change (-1 * 2 ^ Z.of_nat size) with (-base); ring.
+                change ((-1) * 2 ^ Z.of_nat size) with (-base); ring.
              ** replace (base + [|il2|]) with (phi2 ih il - phi2 ih1 il1).
                 { rewrite Hihl1.
                   rewrite <-Hbin in Hs2; lia. }
                 unfold phi2; rewrite <-H2.
                 replace [|il|] with (([|il|] - [|il1|]) + [|il1|]) by ring.
                 rewrite <-Hil2.
-                change (-1 * 2 ^ Z.of_nat size) with (-base); ring.
+                change ((-1) * 2 ^ Z.of_nat size) with (-base); ring.
  Qed.
 
  (** [iszero] *)

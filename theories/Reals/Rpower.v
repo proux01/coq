@@ -61,8 +61,8 @@ Proof.
   { intro; elim H0; clear H0; intros H0 _; simpl in H0; unfold tg_alt in H0;
       simpl in H0.
     replace (/ 3) with
-      (1 * / 1 + -1 * 1 * / 1 + -1 * (-1 * 1) * / 2 +
-       -1 * (-1 * (-1 * 1)) * / (2 + 1 + 1 + 1 + 1)) by field.
+      (1 * / 1 + (-1) * 1 * / 1 + (-1) * ((-1) * 1) * / 2 +
+       (-1) * ((-1) * ((-1) * 1)) * / (2 + 1 + 1 + 1 + 1)) by field.
     apply H0. }
   apply H.
   - unfold Un_decreasing; intros;

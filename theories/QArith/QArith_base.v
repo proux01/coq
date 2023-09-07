@@ -485,7 +485,7 @@ Proof.
   unfold Qeq, Qopp; simpl.
   Open Scope Z_scope.
   intros x y H; simpl.
-  replace (- Qnum x * Zpos (Qden y)) with (- (Qnum x * Zpos (Qden y))) by ring.
+  replace ((- Qnum x) * Zpos (Qden y)) with (- (Qnum x * Zpos (Qden y))) by ring.
   rewrite H;  ring.
   Close Scope Z_scope.
 Qed.

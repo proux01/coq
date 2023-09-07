@@ -72,18 +72,18 @@ Proof.
   replace (sum_f_R0 (fun i:nat => sin_term a (S i)) (2 * n)) with
     (- sum_f_R0 (tg_alt Un) (2 * n)).
   2:{ replace (- sum_f_R0 (tg_alt Un) (2 * n)) with
-      (-1 * sum_f_R0 (tg_alt Un) (2 * n)) by ring.
+      ((-1) * sum_f_R0 (tg_alt Un) (2 * n)) by ring.
       rewrite scal_sum.
       apply sum_eq; intros.
       unfold sin_term, Un, tg_alt;
-        change ((-1) ^ S i) with (-1 * (-1) ^ i).
+        change ((-1) ^ S i) with ((-1) * (-1) ^ i).
       unfold Rdiv; ring. }
   replace (sum_f_R0 (fun i:nat => sin_term a (S i)) (S (2 * n))) with
   (- sum_f_R0 (tg_alt Un) (S (2 * n))).
   2:{ replace (- sum_f_R0 (tg_alt Un) (S (2 * n))) with
-      (-1 * sum_f_R0 (tg_alt Un) (S (2 * n))); [ rewrite scal_sum | ring ].
+      ((-1) * sum_f_R0 (tg_alt Un) (S (2 * n))); [ rewrite scal_sum | ring ].
       apply sum_eq; intros; unfold sin_term, Un, tg_alt;
-        change ((-1) ^ S i) with (-1 * (-1) ^ i).
+        change ((-1) ^ S i) with ((-1) * (-1) ^ i).
       unfold Rdiv; ring. }
   assert
     (sum_f_R0 (tg_alt Un) (S (2 * n)) <= a - sin a <=
@@ -219,16 +219,16 @@ Proof.
   replace (sum_f_R0 (fun i:nat => cos_term a0 (S i)) (2 * n0)) with
     (- sum_f_R0 (tg_alt Un) (2 * n0)).
   2:{ replace (- sum_f_R0 (tg_alt Un) (2 * n0)) with
-    (-1 * sum_f_R0 (tg_alt Un) (2 * n0)); [ rewrite scal_sum | ring ];
+    ((-1) * sum_f_R0 (tg_alt Un) (2 * n0)); [ rewrite scal_sum | ring ];
       apply sum_eq; intros; unfold cos_term, Un, tg_alt;
-      change ((-1) ^ S i) with (-1 * (-1) ^ i).
+      change ((-1) ^ S i) with ((-1) * (-1) ^ i).
       unfold Rdiv; ring. }
   replace (sum_f_R0 (fun i:nat => cos_term a0 (S i)) (S (2 * n0))) with
     (- sum_f_R0 (tg_alt Un) (S (2 * n0))).
   2:{ replace (- sum_f_R0 (tg_alt Un) (S (2 * n0))) with
-        (-1 * sum_f_R0 (tg_alt Un) (S (2 * n0))); [ rewrite scal_sum | ring ].
+        ((-1) * sum_f_R0 (tg_alt Un) (S (2 * n0))); [ rewrite scal_sum | ring ].
       apply sum_eq; intros; unfold cos_term, Un, tg_alt;
-        change ((-1) ^ S i) with (-1 * (-1) ^ i).
+        change ((-1) ^ S i) with ((-1) * (-1) ^ i).
       unfold Rdiv; ring. }
   assert
     (sum_f_R0 (tg_alt Un) (S (2 * n0)) <= 1 - cos a0 <=
@@ -287,7 +287,7 @@ Proof.
       rewrite Rplus_0_l;
       replace (- sum_f_R0 (fun i:nat => cos_n (S i) * (Rsqr a0 * Rsqr a0 ^ i)) n1)
       with
-      (-1 * sum_f_R0 (fun i:nat => cos_n (S i) * (Rsqr a0 * Rsqr a0 ^ i)) n1);
+      ((-1) * sum_f_R0 (fun i:nat => cos_n (S i) * (Rsqr a0 * Rsqr a0 ^ i)) n1);
       [ idtac | ring ]; rewrite scal_sum; apply sum_eq;
       intros; unfold cos_n, Un, tg_alt.
     replace ((-1) ^ S i) with (- (-1) ^ i) by (simpl;ring).

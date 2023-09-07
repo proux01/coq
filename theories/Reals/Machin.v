@@ -27,8 +27,8 @@ Local Open Scope R_scope.
 Definition atan_sub u v := (u - v)/(1 + u * v).
 
 Lemma atan_sub_correct :
- forall u v, 1 + u * v <> 0 -> -PI/2 < atan u - atan v < PI/2 ->
-   -PI/2 < atan (atan_sub u v) < PI/2 ->
+ forall u v, 1 + u * v <> 0 -> (-PI)/2 < atan u - atan v < PI/2 ->
+   (-PI)/2 < atan (atan_sub u v) < PI/2 ->
    atan u = atan v + atan (atan_sub u v).
 Proof.
 intros u v pn0 uvint aint.
@@ -47,7 +47,7 @@ rewrite tan_minus; auto.
 Qed.
 
 Lemma tech : forall x y , -1 <= x <= 1 -> -1 < y < 1 -> 
-  -PI/2 < atan x - atan y < PI/2.
+  (-PI)/2 < atan x - atan y < PI/2.
 Proof.
 assert (ut := PI_RGT_0).
 intros x y [xm1 x1] [ym1 y1].

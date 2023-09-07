@@ -142,7 +142,7 @@ destruct (lt_ge_cases 0 b); [right|left].
   destruct (mod_neg_bound a b); intuition; order.
 Qed.
 
-Lemma div_opp_opp : forall a b, b~=0 -> -a/-b == a/b.
+Lemma div_opp_opp : forall a b, b~=0 -> (-a)/(-b) == a/b.
 Proof.
 intros a b **. symmetry. apply div_unique with (- (a mod b)).
 - now apply opp_mod_bound_or.

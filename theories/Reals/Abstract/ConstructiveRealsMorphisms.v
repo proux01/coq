@@ -609,7 +609,7 @@ Proof.
   apply lt_CR_of_Q in H1.
   destruct (CR_archimedean R1 y) as [A Amaj].
   assert (/ ((r - q) * (1 # A)) * (q - r) == - (Z.pos A # 1))%Q as diveq.
-  { rewrite Qinv_mult_distr. setoid_replace (q-r)%Q with (-1*(r-q))%Q.
+  { rewrite Qinv_mult_distr. setoid_replace (q-r)%Q with ((-1)*(r-q))%Q.
     2:field.
     field_simplify.
     - reflexivity.

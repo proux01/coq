@@ -167,7 +167,7 @@ Proof.
  unfold Zne, not. intros. subst; auto.
 Qed.
 
-Lemma OMEGA19 x : Zne x 0 -> 0 <= x + -1 \/ 0 <= x * -1 + -1.
+Lemma OMEGA19 x : Zne x 0 -> 0 <= x + -1 \/ 0 <= x * (-1) + -1.
 Proof.
  unfold Zne. intros Hx. apply Z.lt_gt_cases in Hx.
  destruct Hx as [LT|GT].

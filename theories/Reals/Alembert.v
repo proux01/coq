@@ -236,7 +236,7 @@ Proof.
   assert (Un_cv (fun n:nat => Rabs (Wn (S n) / Wn n)) 0). {
     rewrite Wn_aux. apply (Alembert_C2_aux_Un_cv (fun n => - An n)).
     - intros;apply Ropp_neq_0_compat, H.
-    - replace (fun n : nat => Rabs (- An (S n) / - An n)) with
+    - replace (fun n : nat => Rabs ((- An (S n)) / - An n)) with
         (fun n : nat => Rabs (An (S n) / An n));[assumption|].
       apply FunctionalExtensionality.functional_extensionality. intros n.
       f_equal. field;trivial.

@@ -180,7 +180,7 @@ replace
   reflexivity.
 - match goal with
     |- _ = - ?r =>
-      replace (- r) with (-1 * r) by ring
+      replace (- r) with ((-1) * r) by ring
   end.
   rewrite scal_sum.
   rewrite decomp_sum.

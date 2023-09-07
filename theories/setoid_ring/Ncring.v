@@ -199,9 +199,9 @@ Qed.
     rewrite ring_add_comm ; rewrite ring_add_0_l ;reflexivity.
  Qed.
 
- Lemma ring_opp_mul_l : forall x y, -(x * y) == -x * y.
+ Lemma ring_opp_mul_l : forall x y, -(x * y) == (-x) * y.
  Proof.
-  intros x y;rewrite <- (ring_add_0_l (- x * y)).
+  intros x y;rewrite <- (ring_add_0_l ((- x) * y)).
   rewrite ring_add_comm .
   rewrite <- (ring_opp_def (x*y)).
   rewrite ring_add_assoc .

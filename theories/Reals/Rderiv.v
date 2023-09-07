@@ -298,8 +298,8 @@ Proof.
         clear H0; intros; elim H0; clear H0; simpl;
           intros; split with x; split; auto.
   intros; generalize (H2 x1 H3); clear H2; intro.
-  replace (- f x1 - - f x0) with (-1 * f x1 - -1 * f x0) by ring.
-  replace (- df x0) with (-1 * df x0) by ring.
+  replace (- f x1 - - f x0) with ((-1) * f x1 - (-1) * f x0) by ring.
+  replace (- df x0) with ((-1) * df x0) by ring.
   exact H2.
 Qed.
 

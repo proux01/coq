@@ -161,7 +161,7 @@ Proof.
 Qed.
 
 Lemma tan_cos_opp : forall x, 0 >= sin x ->
-  tan x = - sqrt (1 - (cos x)²) / cos x.
+  tan x = (- sqrt (1 - (cos x)²)) / cos x.
 Proof.
   intros x H.
   unfold tan.

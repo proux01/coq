@@ -93,7 +93,7 @@ Proof.
            rewrite Rplus_0_r; unfold Rdiv; pattern (/ - y) at 4;
              rewrite Rinv_opp.
            replace
-             (IZR (up (x * / - y)) - x * - / y +
+             (IZR (up (x * / - y)) - x * (- / y) +
                 (- (x * / y) + - (IZR (up (x * / - y)) - 1))) with 1;
              [ idtac | ring ].
            elim H0; intros _ H1; unfold Rdiv in H1; exact H1.

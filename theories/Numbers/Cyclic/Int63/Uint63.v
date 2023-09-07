@@ -580,7 +580,7 @@ Proof. apply subc_spec. Qed.
 Lemma oppc_spec x : [-| oppc x |] = - φ  x .
 Proof. unfold oppc; rewrite -> subc_spec, to_Z_0; trivial. Qed.
 
-Lemma opp_spec x : φ (- x) = - φ  x  mod wB.
+Lemma opp_spec x : φ (- x) = (- φ  x)  mod wB.
 Proof. unfold opp; rewrite -> sub_spec, to_Z_0; trivial. Qed.
 
 Lemma oppcarry_spec x : φ (oppcarry x) = wB - φ  x  - 1.
@@ -1907,7 +1907,7 @@ Proof.
   rewrite (Z.mod_small (φ x%uint63)) by apply to_Z_bounded.
   rewrite <- Z.add_opp_l.
   rewrite Z.opp_add_distr, Z.opp_involutive.
-  replace (- wB) with (-1 * wB) by easy.
+  replace (- wB) with ((-1) * wB) by easy.
   rewrite Z_mod_plus by easy.
   now rewrite Z.mod_small by apply to_Z_bounded.
 Qed.

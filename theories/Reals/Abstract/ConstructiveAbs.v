@@ -255,7 +255,7 @@ Proof.
         reflexivity.
       + apply CRlt_asym, c0.
       + apply CRlt_asym, c.
-      + setoid_replace (x*y) with (- x * - y).
+      + setoid_replace (x*y) with ((- x) * - y).
         * apply CRlt_asym, CRmult_lt_0_compat.
           -- rewrite <- CRopp_0. apply CRopp_gt_lt_contravar, c.
           -- rewrite <- CRopp_0. apply CRopp_gt_lt_contravar, c0.

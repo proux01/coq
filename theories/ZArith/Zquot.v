@@ -181,7 +181,7 @@ Proof.
 
   - rewrite <- (Z.opp_involutive a).
     rewrite Zquot_opp_l, Zrem_opp_l.
-    generalize (Zdiv_mod_unique b (-q) (-a÷b) (-r) (Z.rem (-a) b)).
+    generalize (Zdiv_mod_unique b (-q) ((-a)÷b) (-r) (Z.rem (-a) b)).
     generalize (Zrem_lt_pos (-a) b).
     rewrite <-Z.quot_rem', Z.mul_opp_r, <-Z.opp_add_distr, <-H1.
     lia.

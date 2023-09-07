@@ -86,7 +86,7 @@ Qed.
 Lemma derive_pt_inv :
   forall (f:R -> R) (x:R) (pr:derivable_pt f x) (na:f x <> 0),
     derive_pt (/ f) x (derivable_pt_inv f x na pr) =
-    - derive_pt f x pr / Rsqr (f x).
+    (- derive_pt f x pr) / Rsqr (f x).
 Proof.
   intros;
     replace (derive_pt (/ f) x (derivable_pt_inv f x na pr)) with

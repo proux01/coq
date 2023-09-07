@@ -29,7 +29,7 @@ Module Type Opp (Import T:Typ).
 End Opp.
 
 Module Type OppNotation (T:Typ)(Import O : Opp T).
- Notation "- x" := (opp x) (at level 35, right associativity).
+ Notation "- x" := (opp x) (at level 47, right associativity).
 End OppNotation.
 
 Module Type Opp' (T:Typ) := Opp T <+ OppNotation T.

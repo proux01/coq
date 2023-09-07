@@ -235,7 +235,7 @@ Theorem ropp_neq_0 r :
   ~ -(1) == 0 -> ~ r == 0 -> ~ -r == 0.
 Proof.
 intros.
-setoid_replace (- r) with (- (1) * r).
+setoid_replace (- r) with ((- (1)) * r).
 - apply field_is_integral_domain; trivial.
 - now rewrite <- ropp_mul_l, rmul_1_l.
 Qed.
@@ -289,7 +289,7 @@ apply radd_ext.
   [ ring | now rewrite rdiv_simpl ].
 Qed.
 
-Theorem rdiv5 a b : - (a / b) == - a / b.
+Theorem rdiv5 a b : - (a / b) == (- a) / b.
 Proof.
 now rewrite !rdiv_def, ropp_mul_l.
 Qed.

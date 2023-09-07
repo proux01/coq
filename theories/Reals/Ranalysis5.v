@@ -1207,8 +1207,8 @@ Proof.
     destruct (MVT (fn N) id (x+h) x pr1 pr2 xh_x pr3 pr4) as [c [P Hc]].
     assert (Hc' : h * derive_pt (fn N) c (pr1 c P) = (fn N (x+h) - fn N x)).
     { apply Rmult_eq_reg_l with (-1).
-      { replace (-1 * (h * derive_pt (fn N) c (pr1 c P))) with (-h * derive_pt (fn N) c (pr1 c P)) by field.
-        replace (-1 * (fn N (x + h) - fn N x)) with (- (fn N (x + h) - fn N x)) by field.
+      { replace ((-1) * (h * derive_pt (fn N) c (pr1 c P))) with ((-h) * derive_pt (fn N) c (pr1 c P)) by field.
+        replace ((-1) * (fn N (x + h) - fn N x)) with (- (fn N (x + h) - fn N x)) by field.
         replace (-h) with (id x - id (x + h)) by (unfold id; field).
         rewrite <- Rmult_1_r ; replace 1 with (derive_pt id c (pr2 c P)) by reg.
         replace (- (fn N (x + h) - fn N x)) with (fn N x - fn N (x + h)) by field.
