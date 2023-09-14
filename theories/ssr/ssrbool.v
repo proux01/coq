@@ -302,10 +302,6 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
-Notation reflect := Bool.reflect.
-Notation ReflectT := Bool.ReflectT.
-Notation ReflectF := Bool.ReflectF.
-
 Reserved Notation "~~ b" (at level 35, right associativity).
 Reserved Notation "b ==> c" (at level 55, right associativity).
 Reserved Notation "b1 (+) b2" (at level 50, left associativity).
