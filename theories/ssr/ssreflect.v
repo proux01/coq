@@ -12,7 +12,7 @@
 
 (** #<style> .doc { font-family: monospace; white-space: pre; } </style># **)
 
-Require Import Bool. (* For bool_scope delimiter 'bool'. *)
+(* Require Import Bool. (* For bool_scope delimiter 'bool'. *) *)
 Require Import ssrmatching.
 Declare ML Module "ssreflect_plugin:coq-core.plugins.ssreflect".
 

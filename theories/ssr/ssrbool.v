@@ -12,7 +12,7 @@
 
 (** #<style> .doc { font-family: monospace; white-space: pre; } </style># **)
 
-Require Bool.
+(* Require Bool. *)
 Require Import ssreflect ssrfun.
 
 #[export] Set Warnings "-overwriting-delimiting-key".
