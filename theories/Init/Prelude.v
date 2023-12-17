@@ -22,6 +22,7 @@ Require Export Coq.Init.Wf.
 Require Export Coq.Init.Ltac.
 Require Export Coq.Init.Tactics.
 Require Export Coq.Init.Tauto.
+Require Export Coq.Init.Sumbool.
 (* Some initially available plugins. See also:
    - ltac_plugin (in Ltac)
    - tauto_plugin (in Tauto).
