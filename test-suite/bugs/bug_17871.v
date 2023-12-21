@@ -1,4 +1,4 @@
-From Coq Require Import PrimFloat.
+Require Import TestSuite.primfloat.
 
 Definition foo : { x : float | x = 1%float }.
 Proof.

@@ -19,8 +19,6 @@ Section Foo.
   End Bar.
 End Foo.
 
-Require Coq.Classes.RelationClasses.
-
 Class PreOrder (A : Type) (r : A -> A -> Type) : Type :=
 { refl : forall x, r x x }.
 

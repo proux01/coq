@@ -1,4 +1,4 @@
-Require Import PrimInt63.
+Require Import TestSuite.primint63.
 
 Open Scope uint63_scope.
 

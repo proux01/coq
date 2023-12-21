@@ -1,7 +1,7 @@
 (* -*- coq-prog-args: ("-noinit"); -*- *)
 
-Require Import Coq.Arith.PeanoNat.
-Locate Library Coq.Arith.PeanoNat.
+Require Import Coq.Init.Logic.
+Locate Library Coq.Init.Logic.
 
-(* Check that Init didn't get exported by the import above *)
+(* Check that Init.Datatypes didn't get exported by the import above *)
 Fail Check nat.

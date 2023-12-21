@@ -70,7 +70,7 @@ endif
 endif
 export COQLIB
 
-ifeq ($(wildcard $(COQLIB)/theories/Reals/Reals.vo),)
+ifeq ($(wildcard $(COQLIB)/theories/Init/Prelude.vo),)
   COQLIB_NOT_FOUND:=true
 else
   COQLIB_NOT_FOUND:=false
@@ -349,6 +349,7 @@ unit-tests/%.ml.log: unit-tests/%.ml unit-tests/src/$(UNIT_LINK)
 #######################################################################
 
 prerequisite/requires_deprecated_library.v.log: prerequisite/deprecated_library.v.log
+prerequisite/primfloat.v.log: prerequisite/primint63.v.log
 
 $(addsuffix .log,$(wildcard prerequisite/*.v)): %.v.log: %.v
 	@echo "TEST      $< $(call get_coq_prog_args_in_parens,"$<")"

@@ -1,4 +1,4 @@
-From Coq Require Import Uint63.
+Require Import TestSuite.primint63.
 
 Module Type T.
   Parameter eq : int -> int -> bool.

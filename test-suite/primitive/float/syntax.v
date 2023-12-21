@@ -1,4 +1,4 @@
-Require Import Floats.
+Require Import TestSuite.primfloat.
 
 Open Scope float_scope.
 

@@ -1,4 +1,4 @@
-Require Import Floats.
+Require Import TestSuite.primfloat.
 
 Check 2%float.
 Check 2.5%float.
