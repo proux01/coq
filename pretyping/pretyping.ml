@@ -51,17 +51,20 @@ type typing_constraint = IsType | OfType of types | WithoutTypeConstraint
 
 let (!!) env = GlobEnv.env env
 
-let bidi_hints =
-  Summary.ref (GlobRef.Map.empty : int GlobRef.Map.t) ~name:"bidirectionalityhints"
+type directionality_hint = DHR | DHL | DHRL | DHLR | DHbi of int
 
-let add_bidirectionality_hint gr n =
-  bidi_hints := GlobRef.Map.add gr n !bidi_hints
+let dir_hints =
+  Summary.ref (GlobRef.Map.empty : directionality_hint GlobRef.Map.t)
+    ~name:"directionalityhints"
 
-let get_bidirectionality_hint gr =
-  GlobRef.Map.find_opt gr !bidi_hints
+let add_directionality_hint gr n =
+  dir_hints := GlobRef.Map.add gr n !dir_hints
 
-let clear_bidirectionality_hint gr =
-  bidi_hints := GlobRef.Map.remove gr !bidi_hints
+let get_directionality_hint gr =
+  GlobRef.Map.find_opt gr !dir_hints
+
+let clear_directionality_hint gr =
+  dir_hints := GlobRef.Map.remove gr !dir_hints
 
 (************************************************************************)
 (* This concerns Cases *)
@@ -839,12 +842,24 @@ struct
     let sigma, j = pretype_sort ?loc sigma s in
     discard_trace @@ inh_conv_coerce_to_tycon ?loc ~flags env sigma j tycon
 
+  type dir = DirR | DirL | DirRL | DirLR
+
   let pretype_app self (f, args) =
     fun ?loc ~flags tycon env sigma ->
     let pretype tycon env sigma c = eval_pretyper self ~flags tycon env sigma c in
     let sigma, fj = pretype empty_tycon env sigma f in
     let floc = loc_of_glob_constr f in
     let length = List.length args in
+    let dir =
+      let dh =
+        try
+          let (gr,_) = destRef sigma fj.uj_val in
+          get_directionality_hint gr
+        with DestKO -> None in
+      match dh with
+      | None | Some (DHbi _) -> DirR
+      | Some DHR -> DirR | Some DHL -> DirL
+      | Some DHRL -> DirRL | Some DHLR -> DirLR in
     let nargs_before_bidi =
       if Option.is_empty tycon then length
       (* We apply bidirectionality hints only if an expected type is specified *)
@@ -852,6 +867,9 @@ struct
       (* if `f` is a global, we retrieve bidirectionality hints *)
         try
           let (gr,_) = destRef sigma fj.uj_val in
+          let get_bidirectionality_hint gr =
+            match get_directionality_hint gr with
+            | Some (DHbi n) -> Some n | _ -> None in
           Option.default length @@ get_bidirectionality_hint gr
         with DestKO ->
           length
@@ -893,7 +911,7 @@ struct
         else sigma, resj
       | _ -> sigma, resj
     in
-    let rec apply_rec env sigma n body (subs, typ) val_before_bidi candargs bidiargs = function
+    let rec apply_rec_old env sigma n body (subs, typ) val_before_bidi candargs bidiargs = function
       | [] ->
         let typ = Vars.esubst Vars.lift_substituend subs typ in
         let body = Coercion.force_app_body body in
@@ -947,12 +965,93 @@ struct
         let subs = Esubst.subs_cons (Vars.make_substituend ujval) subs in
         let body = Coercion.push_arg body ujval in
         let val_before_bidi = if bidi then val_before_bidi else body in
-        apply_rec env sigma (n+1) body (subs, c2) val_before_bidi candargs bidiargs rest
+        apply_rec_old env sigma (n+1) body (subs, c2) val_before_bidi candargs bidiargs rest
+    in
+    let rec apply_rec env sigma n body (subs, typ) val_before_bidi candargs bidiargs r2l = function
+      | [] ->
+        let typ = Vars.esubst Vars.lift_substituend subs typ in
+        sigma, [], typ, val_before_bidi, List.rev bidiargs
+      | c::rest ->
+        let bidi = n >= nargs_before_bidi in
+        let argloc = loc_of_glob_constr c in
+        let sigma, body, na, c1, subs, c2, trace = match EConstr.kind sigma typ with
+        | Prod (na, c1, c2) ->
+          (* Fast path *)
+          let c1 = Vars.esubst Vars.lift_substituend subs c1 in
+          sigma, body, na, c1, subs, c2, Coercion.empty_coercion_trace
+        | _ ->
+          let typ = Vars.esubst Vars.lift_substituend subs typ in
+          let sigma, body, typ, trace = Coercion.inh_app_fun ~program_mode:flags.program_mode ~resolve_tc:flags.resolve_tc ~use_coercions:flags.use_coercions !!env sigma body typ in
+          let resty = whd_all !!env sigma typ in
+          let na, c1, c2 = match EConstr.kind sigma resty with
+          | Prod (na, c1, c2) -> (na, c1, c2)
+          | _ ->
+            let sigma, hj = pretype empty_tycon env sigma c in
+            let resj = { uj_val = Coercion.force_app_body body; uj_type = typ } in
+            error_cant_apply_not_functional
+              ?loc:(Loc.merge_opt floc argloc) !!env sigma resj [|hj|]
+          in
+          sigma, body, na, c1, Esubst.subs_id 0, c2, trace
+        in
+        let (sigma, hj), bidiargs =
+          if bidi || r2l then
+            (* We want to get some typing information from the context before
+               typing the argument, so we replace it by an existential
+               variable *)
+            let sigma, c_hole = new_evar env sigma ~src:(loc,Evar_kinds.InternalHole) c1 in
+            (sigma, make_judge c_hole c1),
+            if bidi then (c_hole, c1, c, trace) :: bidiargs else bidiargs
+          else
+            let tycon = Some c1 in
+            pretype tycon env sigma c, bidiargs in
+        let sigma, candargs, ujval =
+          match candargs with
+          | [] -> sigma, [], j_val hj
+          | arg :: args ->
+            begin match Evarconv.unify_delay !!env sigma (j_val hj) arg with
+              | exception Evarconv.UnableToUnify (sigma,e) ->
+                raise (PretypeError (!!env,sigma,CannotUnify (j_val hj, arg, Some e)))
+              | sigma ->
+                sigma, args, nf_evar sigma (j_val hj)
+            end
+        in
+        let sigma, ujval = adjust_evar_source sigma na.binder_name ujval in
+        let subs = Esubst.subs_cons (Vars.make_substituend ujval) subs in
+        let body = Coercion.push_arg body ujval in
+        let val_before_bidi = if bidi then val_before_bidi else body in
+        let sigma, vals, typ, val_before_bidi, bidiargs =
+          apply_rec env sigma (n+1) body (subs, c2) val_before_bidi candargs bidiargs r2l rest in
+        let sigma, ujval =
+          if not r2l then sigma, ujval else
+            (* Type the argument using the expected type *)
+            let sigma, ujval' = pretype (Some c1) env sigma c in
+            let ujval' = j_val ujval' in
+            (* Unify the (possibly refined) existential variable with the
+               (typechecked) original value *)
+            let sigma = try Evarconv.unify_delay !!env sigma ujval ujval'
+              with Evarconv.UnableToUnify (sigma,e) ->
+                raise (PretypeError (!!env,sigma,CannotUnify (ujval, ujval', Some e))) in
+            sigma, ujval' in
+        sigma, ujval :: vals, typ, val_before_bidi, bidiargs
     in
     let typ = (Esubst.subs_id 0, fj.uj_type) in
     let body = (Coercion.start_app_body sigma fj.uj_val) in
     let sigma, resj, val_before_bidi, bidiargs =
-      apply_rec env sigma 0 body typ body candargs [] args
+      match dir with DirR ->
+        apply_rec_old env sigma 0 body typ body candargs [] args
+      | _ ->
+      let sigma, vals, typ, val_before_bidi, bidiargs =
+        let tryr2l r2l =
+          apply_rec env sigma 0 body typ body candargs [] r2l args in
+        match dir with
+        | DirR -> assert false | DirL -> tryr2l true
+        | DirRL -> begin try tryr2l false with PretypeError _ -> tryr2l true end
+        | DirLR -> begin try tryr2l true with PretypeError _ -> tryr2l false end
+      in
+      let body = List.fold_left Coercion.push_arg body vals in
+      let body = Coercion.force_app_body body in
+      let resj = { uj_val = body; uj_type = typ } in
+      sigma, resj, val_before_bidi, bidiargs
     in
     let sigma, resj = refresh_template env sigma resj in
     let sigma, resj, otrace = inh_conv_coerce_to_tycon ?loc ~flags env sigma resj tycon in

@@ -866,6 +866,10 @@ GRAMMAR EXTEND Gram
       | IDENT "clear"; IDENT "implicits" -> { [`ClearImplicits] }
       | IDENT "clear"; IDENT "scopes" -> { [`ClearScopes] }
       | IDENT "clear"; IDENT "bidirectionality"; IDENT "hint" -> { [`ClearBidiHint] }
+      | IDENT ">" -> { [`DirHintR] }
+      | IDENT "<" -> { [`DirHintL] }
+      | IDENT ">"; IDENT "<" -> { [`DirHintRL] }
+      | IDENT "<"; IDENT ">" -> { [`DirHintLR] }
       | IDENT "rename" -> { [`Rename] }
       | IDENT "assert" -> { [`Assert] }
       | IDENT "extra"; IDENT "scopes" -> { [`ExtraScopes] }

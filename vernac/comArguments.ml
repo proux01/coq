@@ -18,33 +18,36 @@ let smart_global r =
   Dumpglob.add_glob ?loc:r.loc gr;
   gr
 
-let cache_bidi_hints (gr, ohint) =
+let cache_dir_hints (gr, ohint) =
   match ohint with
-  | None -> Pretyping.clear_bidirectionality_hint gr
-  | Some nargs -> Pretyping.add_bidirectionality_hint gr nargs
+  | None -> Pretyping.clear_directionality_hint gr
+  | Some nargs -> Pretyping.add_directionality_hint gr nargs
 
-let load_bidi_hints _ r =
-  cache_bidi_hints r
+let load_dir_hints _ r =
+  cache_dir_hints r
 
-let subst_bidi_hints (subst, (gr, ohint as orig)) =
+let subst_dir_hints (subst, (gr, ohint as orig)) =
   let gr' = Globnames.subst_global_reference subst gr in
   if gr == gr' then orig else (gr', ohint)
 
-let discharge_bidi_hints (gr, ohint) =
+let discharge_dir_hints (gr, ohint) =
   if Globnames.isVarRef gr && Lib.is_in_section gr then None
   else
     let vars = Lib.section_instance gr in
     let n = Array.length vars in
-    Some (gr, Option.map ((+) n) ohint)
+    let upd = function
+      | Pretyping.DHbi n' -> Pretyping.DHbi (n + n')
+      | _ as h -> h in
+    Some (gr, Option.map upd ohint)
 
-let inBidiHints =
+let inDirHints =
   let open Libobject in
   declare_object { (default_object "BIDIRECTIONALITY-HINTS" ) with
-                   load_function = load_bidi_hints;
-                   cache_function = cache_bidi_hints;
+                   load_function = load_dir_hints;
+                   cache_function = cache_dir_hints;
                    classify_function = (fun o -> Substitute);
-                   subst_function = subst_bidi_hints;
-                   discharge_function = discharge_bidi_hints;
+                   subst_function = subst_dir_hints;
+                   discharge_function = discharge_dir_hints;
                  }
 
 
@@ -82,6 +85,10 @@ let vernac_arguments ~section_local reference args more_implicits flags =
   let never_unfold_flag = List.mem `ReductionNeverUnfold flags in
   let nomatch_flag = List.mem `ReductionDontExposeCase flags in
   let clear_bidi_hint = List.mem `ClearBidiHint flags in
+  let dirR_hint = List.mem `DirHintR flags in
+  let dirL_hint = List.mem `DirHintL flags in
+  let dirRL_hint = List.mem `DirHintRL flags in
+  let dirLR_hint = List.mem `DirHintLR flags in
 
   let err_incompat x y =
     CErrors.user_err Pp.(str ("Options \""^x^"\" and \""^y^"\" are incompatible.")) in
@@ -303,19 +310,38 @@ let vernac_arguments ~section_local reference args more_implicits flags =
             strbrk "are relevant for constants only.")
   end;
 
-  if bidi_hint_specified then begin
-    let n = Option.get nargs_before_bidi in
+  let h =
+    match bidi_hint_specified, dirR_hint, dirL_hint, dirRL_hint, dirLR_hint with
+    | false, false, false, false, false
+    | false, true, false, false, false -> None
+    | true, false, false, false, false ->
+       Option.map (fun n -> Pretyping.DHbi n) nargs_before_bidi
+    | true, true, _, _, _ -> err_incompat "&" ">"
+    | true, false, true, _, _ -> err_incompat "&" "<"
+    | true, false, false, true, _ -> err_incompat "&" "> <"
+    | true, false, false, false, true -> err_incompat "&" "< >"
+    | false, false, true, false, false -> Some Pretyping.DHL
+    | false, false, false, true, false -> Some Pretyping.DHRL
+    | false, false, false, false, true -> Some Pretyping.DHLR
+    | false, true, true, _, _ -> err_incompat ">" "<"
+    | false, true, false, true, _ -> err_incompat ">" "> <"
+    | false, true, false, false, true -> err_incompat ">" "< >"
+    | false, false, true, true, _ -> err_incompat "<" "> <"
+    | false, false, true, false, true -> err_incompat "<" "< >"
+    | false, false, false, true, true -> err_incompat "> <" "< >" in
+  begin match h with None -> () | Some h ->
     if section_local then
-      Pretyping.add_bidirectionality_hint sr n
+      Pretyping.(add_directionality_hint sr h)
     else
-      Lib.add_leaf (inBidiHints (sr, Some n))
+      Lib.add_leaf (inDirHints (sr, Some h))
   end;
 
-  if clear_bidi_hint then begin
+  if clear_bidi_hint
+     && not (dirL_hint || dirR_hint || dirRL_hint || dirLR_hint) then begin
     if section_local then
-      Pretyping.clear_bidirectionality_hint sr
+      Pretyping.clear_directionality_hint sr
     else
-      Lib.add_leaf (inBidiHints (sr, None))
+      Lib.add_leaf (inDirHints (sr, None))
   end;
 
   if not (renaming_specified ||

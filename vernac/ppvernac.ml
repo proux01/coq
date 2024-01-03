@@ -1105,8 +1105,12 @@ let pr_synpure_vernac_expr v =
                  | `ExtraScopes -> keyword "extra scopes"
                  | `ClearImplicits -> keyword "clear implicits"
                  | `ClearScopes -> keyword "clear scopes"
-                 | `ClearBidiHint -> keyword "clear bidirectionality hint")
-               mods)
+                 | `ClearBidiHint -> keyword "clear bidirectionality hint"
+                 | `DirHintR -> assert false
+                 | `DirHintL -> keyword "<"
+                 | `DirHintRL -> keyword "> <"
+                 | `DirHintLR -> keyword "< >")
+              (List.filter ((<>) `DirHintR) mods))
     )
   | VernacReserve bl ->
     let n = List.length (List.flatten (List.map fst bl)) in

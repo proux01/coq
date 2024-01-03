@@ -319,6 +319,10 @@ type vernac_argument_status =
 type arguments_modifier =
   [  `Assert
   | `ClearBidiHint
+  | `DirHintR
+  | `DirHintL
+  | `DirHintRL
+  | `DirHintLR
   | `ClearImplicits
   | `ClearScopes
   | `DefaultImplicits

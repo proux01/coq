@@ -325,7 +325,13 @@ let print_arguments ref =
   in
   let impls = main_implicits 0 names recargs scopes impls in
   let moreimpls = List.map (fun (_,i) -> List.map extra_implicit_kind_of_status i) moreimpls in
-  let bidi = Pretyping.get_bidirectionality_hint ref in
+  let flags, bidi = match Pretyping.get_directionality_hint ref with
+    | None -> flags, None
+    | Some Pretyping.DHR -> `DirHintR::flags, None
+    | Some DHL -> `DirHintL::flags, None
+    | Some DHRL -> `DirHintRL::flags, None
+    | Some DHLR -> `DirHintLR::flags, None
+    | Some (DHbi n) -> flags, Some n in
   let impls = insert_fake_args nargs_for_red bidi impls in
   if List.for_all is_dummy impls && moreimpls = [] && flags = [] then []
   else
@@ -376,10 +382,10 @@ let print_inductive_args sp mipv =
                     mip.mind_consnames) mipv
 
 let print_bidi_hints gr =
-  match Pretyping.get_bidirectionality_hint gr with
-  | None -> []
-  | Some nargs ->
+  match Pretyping.get_directionality_hint gr with
+  | Some (DHbi nargs) ->
     [str "Using typing information from context after typing the " ++ int nargs ++ str " first arguments"]
+  | None | Some _ -> []
 
 (*********************)
 (* "Locate" commands *)
