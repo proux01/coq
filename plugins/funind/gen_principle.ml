@@ -1697,7 +1697,7 @@ let register_mes interactive_proof fname rec_impls wf_mes_expr wf_rel_expr_opt
         let make_dir l = DirPath.make (List.rev_map Id.of_string l) in
         Libnames.qualid_of_path
           (Libnames.make_path
-             (make_dir ["Arith"; "Wf_nat"])
+             (make_dir ["Arith"; "Base"; "Stdlib"; "Arith"; "Wf_nat"])
              (Id.of_string "ltof"))
       in
       let fun_from_mes =
