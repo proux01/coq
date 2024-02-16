@@ -35,7 +35,7 @@ Lemma ltb_lt : forall n m,
   (n <? m)%uint63 = (φ (n)%uint63 <? φ (m)%uint63)%Z.
 Proof.
   intros. apply Bool.eq_true_iff_eq.
-  rewrite ltb_spec. rewrite <- Z.ltb_lt.
+  rewrite ltb_spec, Z.compare_lt_iff, <- Z.ltb_lt.
   apply iff_refl.
 Qed.
 
@@ -48,7 +48,7 @@ Lemma leb_le : forall n m,
   (n <=? m)%uint63 = (φ (n)%uint63 <=? φ (m)%uint63)%Z.
 Proof.
   intros. apply Bool.eq_true_iff_eq.
-  rewrite leb_spec. rewrite <- Z.leb_le.
+  rewrite leb_spec, Z.compare_le_iff, <- Z.leb_le.
   apply iff_refl.
 Qed.
 

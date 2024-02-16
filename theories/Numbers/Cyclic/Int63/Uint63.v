@@ -17,10 +17,8 @@ Require Import Zpow_facts.
 Require Import Zgcd_alt.
 Require ZArith.
 Import Znumtheory.
-Require Export PrimInt63.
+Require Export PrimInt63 Uint63Axioms.
 
-
-Definition size := 63%nat.
 
 Notation int := int (only parsing).
 Notation lsl := lsl (only parsing).
@@ -57,33 +55,9 @@ Infix "<=?" := leb (at level 70, no associativity) : uint63_scope.
 Infix "≤?" := leb (at level 70, no associativity) : uint63_scope.
 End Uint63NotationsInternalB.
 
-(** The number of digits as a int *)
-Definition digits := 63.
-
-(** The bigger int *)
-Definition max_int := Eval vm_compute in 0 - 1.
 Register Inline max_int.
-
-(** Access to the nth digits *)
-Definition get_digit x p := (0 <? (x land (1 << p))).
-
-Definition set_digit x p (b:bool) :=
-  if if 0 <=? p then p <? digits else false then
-    if b then x lor (1 << p)
-    else x land (max_int lxor (1 << p))
-  else x.
-
-(** Equality to 0 *)
-Definition is_zero (i:int) := i =? 0.
 Register Inline is_zero.
-
-(** Parity *)
-Definition is_even (i:int) := is_zero (i land 1).
 Register Inline is_even.
-
-(** Bit *)
-
-Definition bit i n :=  negb (is_zero ((i >> n) << (digits - 1))).
 (* Register bit as PrimInline. *)
 
 (** Extra modulo operations *)
@@ -99,7 +73,6 @@ Register Inline succ.
 Definition pred i := i - 1.
 Register Inline pred.
 
-Definition addcarry i j := i + j + 1.
 Register Inline addcarry.
 
 Definition subcarry i j := i - j - 1.
@@ -107,31 +80,12 @@ Register Inline subcarry.
 
 (** Exact arithmetic operations *)
 
-Definition addc_def x y :=
-  let r := x + y in
-  if r <? x then C1 r else C0 r.
 Notation addc := addc (only parsing).
-
-Definition addcarryc_def x y :=
-  let r := addcarry x y in
-  if r <=? x then C1 r else C0 r.
 Notation addcarryc := addcarryc (only parsing).
-
-Definition subc_def x y :=
-  if y <=? x then C0 (x - y) else C1 (x - y).
 Notation subc := subc (only parsing).
-
-Definition subcarryc_def x y :=
-  if y <? x then C0 (x - y - 1) else C1 (x - y - 1).
 Notation subcarryc := subcarryc (only parsing).
-
-Definition diveucl_def x y := (x/y, x mod y).
 Notation diveucl := diveucl (only parsing).
-
 Notation diveucl_21 := diveucl_21 (only parsing).
-
-Definition addmuldiv_def p x y :=
-  (x << p) lor (y >> (digits - p)).
 Notation addmuldiv := addmuldiv (only parsing).
 
 Module Import Uint63NotationsInternalC.
@@ -149,42 +103,9 @@ Register Inline succc.
 Definition predc i := i -c 1.
 Register Inline predc.
 
-(** Comparison *)
-Definition compare_def x y :=
-  if x <? y then Lt
-  else if (x =? y) then Eq else Gt.
-
 Notation compare := compare (only parsing).
 
 Import Bool ZArith.
-(** Translation to Z *)
-Fixpoint to_Z_rec (n:nat) (i:int) :=
-  match n with
-  | O => 0%Z
-  | S n =>
-    (if is_even i then Z.double else Zdouble_plus_one) (to_Z_rec n (i >> 1))
-  end.
-
-Definition to_Z := to_Z_rec size.
-
-Fixpoint of_pos_rec (n:nat) (p:positive) {struct p} :=
-  match n, p with
-  | O, _ => 0
-  | S n, xH => 1
-  | S n, xO p => (of_pos_rec n p) << 1
-  | S n, xI p => (of_pos_rec n p) << 1 lor 1
-  end.
-
-Definition of_pos := of_pos_rec size.
-
-Definition of_Z z :=
-  match z with
-  | Zpos p => of_pos p
-  | Z0 => 0
-  | Zneg p => - (of_pos p)
-  end.
-
-Definition wB := (2 ^ (Z.of_nat size))%Z.
 
 Notation to_nat i := (Z.to_nat (to_Z i)).
 Notation of_nat n := (of_Z (Z.of_nat n)).
@@ -259,89 +180,15 @@ Local Notation "[+| c |]" :=
 Local Notation "[-| c |]" :=
    (interp_carry (-1) wB to_Z c)  (at level 0, c at level 99) : uint63_scope.
 
-(* Bijection : uint63 <-> Bvector size *)
-
-Axiom of_to_Z : forall x, of_Z φ  x  = x.
-
 Lemma can_inj {rT aT} {f: aT -> rT} {g: rT -> aT} (K: forall a, g (f a) = a) {a a'} (e: f a = f a') : a = a'.
 Proof. generalize (K a) (K a'). congruence. Qed.
 
 Lemma to_Z_inj x y : φ x = φ y → x = y.
 Proof. exact (λ e, can_inj of_to_Z e). Qed.
 
-(** Specification of logical operations *)
-Local Open Scope Z_scope.
-Axiom lsl_spec : forall x p, φ (x << p)  = φ x  * 2 ^ φ  p  mod wB.
-
-Axiom lsr_spec : forall x p, φ (x >> p) = φ x / 2 ^ φ p.
-
-Axiom land_spec: forall x y i , bit (x land y) i = bit x i && bit y i.
-
-Axiom lor_spec: forall x y i, bit (x lor y) i = bit x i || bit y i.
-
-Axiom lxor_spec: forall  x y i, bit (x lxor y) i = xorb (bit x i) (bit y i).
-
-(** Specification of basic opetations *)
-
-(* Arithmetic modulo operations *)
-
-(* Remarque : les axiomes seraient plus simple si on utilise of_Z a la place :
-   exemple : add_spec : forall x y, of_Z (x + y) = of_Z x + of_Z y. *)
-
-Axiom add_spec : forall x y, φ (x + y) = (φ x + φ y) mod wB.
-
-Axiom sub_spec : forall x y, φ (x - y) = (φ x - φ y) mod wB.
-
-Axiom mul_spec : forall x y, φ (x * y) = φ x * φ y mod wB.
-
-Axiom mulc_spec : forall x y, φ x * φ y = φ (fst (mulc x y)) * wB + φ (snd (mulc x y)).
-
-Axiom div_spec : forall x y, φ (x / y) = φ x / φ y.
-
-Axiom mod_spec : forall x y, φ (x mod y) = φ x mod φ y.
-
-(* Comparisons *)
-Axiom eqb_correct : forall i j, (i =? j)%uint63 = true -> i = j.
-
-Axiom eqb_refl : forall x, (x =? x)%uint63 = true.
-
-Axiom ltb_spec : forall x y, (x <? y)%uint63 = true <-> φ x < φ y.
-
-Axiom leb_spec : forall x y, (x <=? y)%uint63 = true <-> φ x <= φ y.
-
-(** Exotic operations *)
-
 (** I should add the definition (like for compare) *)
 Notation head0 := head0 (only parsing).
 Notation tail0 := tail0 (only parsing).
-
-(** Axioms on operations which are just short cut *)
-
-Axiom compare_def_spec : forall x y, compare x y = compare_def x y.
-
-Axiom head0_spec  : forall x,  0 < φ x ->
-         wB/ 2 <= 2 ^ (φ (head0 x)) * φ x < wB.
-
-Axiom tail0_spec  : forall x, 0 < φ x ->
-         (exists y, 0 <= y /\ φ x = (2 * y + 1) * (2 ^ φ (tail0 x)))%Z.
-
-Axiom addc_def_spec : forall x y, (x +c y)%uint63 = addc_def x y.
-
-Axiom addcarryc_def_spec : forall x y, addcarryc x y = addcarryc_def x y.
-
-Axiom subc_def_spec : forall x y, (x -c y)%uint63 = subc_def x y.
-
-Axiom subcarryc_def_spec : forall x y, subcarryc x y = subcarryc_def x y.
-
-Axiom diveucl_def_spec : forall x y, diveucl x y = diveucl_def x y.
-
-Axiom diveucl_21_spec :  forall a1 a2 b,
-   let (q,r) := diveucl_21 a1 a2 b in
-   let (q',r') := Z.div_eucl (φ a1 * wB + φ a2) φ b in
-   φ a1 < φ b -> φ q = q' /\ φ r = r'.
-
-Axiom addmuldiv_def_spec : forall p x y,
-  addmuldiv p x y = addmuldiv_def p x y.
 
 (** Square root functions using newton iteration **)
 Local Open Scope uint63_scope.
@@ -416,7 +263,7 @@ Definition gcd := gcd_rec (2*size).
 (** equality *)
 Lemma eqb_complete : forall x y, x = y -> (x =? y) = true.
 Proof.
- intros x y H; rewrite -> H, eqb_refl;trivial.
+ now intros x y H; rewrite H, Uint63Axioms.eqb_refl.
 Qed.
 
 Lemma eqb_spec : forall x y, (x =? y) = true <-> x = y.
@@ -467,7 +314,7 @@ Lemma cast_refl : forall i, cast i i = Some (fun P H => H).
 Proof.
  unfold cast;intros i.
  generalize (eqb_correct i i).
- rewrite eqb_refl;intros e.
+ rewrite Uint63Axioms.eqb_refl;intros e.
  rewrite (Eqdep_dec.eq_proofs_unicity eq_dec (e (eq_refl true)) (eq_refl i));trivial.
 Qed.
 
@@ -487,7 +334,7 @@ Lemma eqo_refl : forall i, eqo i i = Some (eq_refl i).
 Proof.
  unfold eqo;intros i.
  generalize (eqb_correct i i).
- rewrite eqb_refl;intros e.
+ rewrite Uint63Axioms.eqb_refl;intros e.
  rewrite (Eqdep_dec.eq_proofs_unicity eq_dec (e (eq_refl true)) (eq_refl i));trivial.
 Qed.
 
@@ -503,7 +350,7 @@ Lemma eqbP x y : reflect (φ  x  = φ  y ) (x =? y).
 Proof. apply iff_reflect; rewrite eqb_spec; split; [ apply to_Z_inj | apply f_equal ]. Qed.
 
 Lemma ltbP x y : reflect (φ  x  < φ  y )%Z (x <? y).
-Proof. apply iff_reflect; symmetry; apply ltb_spec. Qed.
+Proof. apply iff_reflect; symmetry; apply Uint63Axioms.ltb_spec. Qed.
 
 Lemma lebP x y : reflect (φ  x  <= φ  y )%Z (x ≤? y).
 Proof. apply iff_reflect; symmetry; apply leb_spec. Qed.
@@ -708,11 +555,11 @@ Proof.
      - apply (f_equal2 Z.modulo); auto with zarith.
    }
    case_eq (n <=? m + n)%uint63; auto.
-   rewrite leb_spec, H1; auto with zarith.
+   rewrite leb_spec, H1, Z.compare_le_iff; lia.
  - assert (H1: (φ (m + n)  = φ m + φ n)%Z).
    { rewrite add_spec, Zmod_small; auto with zarith. }
    replace (n <=? m + n)%uint63 with true; auto.
-   apply sym_equal; rewrite leb_spec, H1; auto with zarith.
+   apply sym_equal; rewrite leb_spec, H1, Z.compare_le_iff; lia.
 Qed.
 
 Lemma add_cancel_l x y z : (x + y = x + z)%uint63 -> y = z.
@@ -920,8 +767,10 @@ Proof.
     1, 2: now rewrite lsr_spec; apply Z.div_lt_upper_bound.
     intros b.
     case (Zle_or_lt φ digits φ b).
-    + rewrite <- leb_spec; intros; rewrite !bit_M; auto.
-    + rewrite <- ltb_spec; intros; rewrite !bit_half; auto.
+    + rewrite <-Z.compare_le_iff, <- Uint63Axioms.leb_spec.
+      intros; rewrite !bit_M; auto.
+    + rewrite <-Z.compare_lt_iff, <- ltb_spec.
+      intros; rewrite !bit_half; auto.
 Qed.
 
 Lemma bit_lsl x i j : bit (x << i) j =
@@ -937,7 +786,8 @@ Proof.
     clear H.
     generalize (ltb_spec j i); case ltb; intros H2; unfold bit; simpl.
     + change 62%uint63 with (digits - 1)%uint63.
-      assert (F2: (φ j < φ i)%Z) by (case H2; auto); clear H2.
+      assert (F2: (φ j < φ i)%Z).
+        now rewrite <-Z.compare_lt_iff; (case H2; auto); clear H2.
       replace (is_zero (((x << i) >> j) << (digits - 1))) with true; auto.
       case (to_Z_bounded j); intros  H1j H2j.
       apply sym_equal; rewrite is_zero_spec; apply to_Z_inj.
@@ -1012,16 +862,17 @@ Proof.
  - intros n IH x y; rewrite inj_S.
    unfold Z.succ; rewrite -> Zpower_exp, Z.pow_1_r; auto with zarith.
    intros Hx Hy.
-   rewrite leb_spec.
+   rewrite Uint63Axioms.leb_spec.
    rewrite -> (to_Z_split y) at 1; rewrite (to_Z_split (x lor y)).
    assert (φ (y>>1) <= φ ((x lor y) >> 1)).
-   + rewrite -> lor_lsr, <-leb_spec; apply IH.
+   + rewrite -> lor_lsr, <-Z.compare_le_iff, <-leb_spec; apply IH.
      * rewrite -> lsr_spec, to_Z_1, Z.pow_1_r; split; auto with zarith.
        apply Zdiv_lt_upper_bound; auto with zarith.
      * rewrite -> lsr_spec, to_Z_1, Z.pow_1_r; split; auto with zarith.
        apply Zdiv_lt_upper_bound; auto with zarith.
-   + assert (φ (bit y 0) <= φ (bit (x lor y) 0)); auto with zarith.
-     rewrite lor_spec; do 2 case bit; try discriminate.
+   + assert (φ (bit y 0) <= φ (bit (x lor y) 0)).
+     * rewrite lor_spec, <-Z.compare_le_iff; do 2 case bit; try discriminate.
+     * rewrite Z.compare_le_iff; lia.
 Qed.
 
 Lemma bit_0 n : bit 0 n = false.
@@ -1053,9 +904,9 @@ Proof.
          case_eq (digits <=? m)%uint63;  [idtac | rewrite <- not_true_iff_false];
            intros Heq.
          + rewrite bit_M in H1; auto; discriminate.
-         + rewrite leb_spec in Heq.
+         + rewrite leb_spec, Z.compare_le_iff in Heq.
            apply (Hn (m + 1)%uint63);
-             rewrite <-bit_half; auto; rewrite ltb_spec; auto with zarith.
+             rewrite <-bit_half; auto; rewrite ltb_spec, Z.compare_lt_iff; lia.
      }
      rewrite (bit_split (x lor y)), lor_lsr, <- F1, lor_spec.
      replace (b2i (bit x 0 || bit y 0)) with (bit x 0 + bit y 0)%uint63.
@@ -1118,8 +969,10 @@ Proof.
                         case (to_Z_bounded (x >> 1)); case (to_Z_bounded (y >> 1)); auto with zarith.
                      -- generalize Hb; rewrite (to_Z_split x) at 1; rewrite (to_Z_split y) at 1.
                         case (to_Z_bounded (bit x 0)); case (to_Z_bounded (bit y 0)); auto with zarith.
-               - rewrite ltb_spec, sub_spec, to_Z_1, Zmod_small; auto with zarith.
-               - rewrite ltb_spec, sub_spec, to_Z_1, Zmod_small; auto with zarith.
+               - rewrite Z.compare_le_iff in Hlm.
+                 rewrite ltb_spec, sub_spec, to_Z_1, Zmod_small, Z.compare_lt_iff; lia.
+               - rewrite Z.compare_le_iff in Hlm.
+                 rewrite ltb_spec, sub_spec, to_Z_1, Zmod_small, Z.compare_lt_iff; lia.
              }
              apply to_Z_inj.
              rewrite add_spec, sub_spec, Zplus_mod_idemp_l, to_Z_1, Zmod_small; auto with zarith.
@@ -1146,7 +999,8 @@ Proof.
    rewrite <- not_true_iff_false, ltb_spec; intros H2.
    case (_ ≤? _); try discriminate.
    intros _; rewrite bit_M; try discriminate.
-   rewrite -> leb_spec, add_spec, Zmod_small, sub_spec, Zmod_small; auto with zarith.
+   rewrite Z.compare_ge_iff in H2.
+   rewrite -> leb_spec, add_spec, Zmod_small, sub_spec, Zmod_small, Z.compare_le_iff; auto with zarith.
    rewrite -> sub_spec, Zmod_small; auto with zarith.
 Qed.
 
@@ -1328,9 +1182,9 @@ Proof.
    + intros j2 H1 H2; contradict H2; apply Zlt_not_le.
      fold wB;assert (W:=to_Z_bounded i).
      apply Z.le_lt_trans with (φ i); auto with zarith.
-     assert (0 <= φ i/2)%Z by (apply Z_div_pos; auto with zarith).
-     apply Z.le_trans with (2 * (φ i/2)); auto with zarith.
-     apply Z_mult_div_ge; auto with zarith.
+     assert (0 <= φ i/2)%Z by (apply Z_div_pos; lia).
+     apply Z.le_trans with (2 * (φ i/2)); [lia| ].
+     apply Z_mult_div_ge; lia.
  - case (to_Z_bounded i); repeat rewrite Z.pow_2_r; auto with zarith.
 Qed.
 
@@ -1419,7 +1273,7 @@ Proof.
  cbv zeta.
  case_eq (ih <? j)%uint63;intros Heq.
  2:{
-   rewrite <-not_true_iff_false, ltb_spec in Heq.
+   rewrite <-not_true_iff_false, ltb_spec, Z.compare_lt_iff in Heq.
    split; auto.
    apply sqrt_test_true; auto with zarith.
    unfold zn2z_to_Z; replace φ ih with φ j; auto with zarith.
@@ -1453,6 +1307,7 @@ Proof.
      apply Zdiv_lt_upper_bound; auto with zarith. }
    apply Hrec; rewrite H; clear u H.
    + assert (Hf1: 0 <= Φ (WW ih il) / φ j) by (apply Z_div_pos; auto with zarith).
+     rewrite Z.compare_lt_iff in Heq, Heq0.
      case (Zle_lt_or_eq 1 (φ j)); auto with zarith; intros Hf2.
      split.
      * replace (φ j + Φ (WW ih il) / φ j)%Z with
@@ -1524,7 +1379,8 @@ Lemma sqrt2_spec : forall x y,
    + simpl interp_carry in Hil2.
      case_eq (ih1  <? ih)%uint63;  [idtac | rewrite <- not_true_iff_false];
        rewrite ltb_spec; intros Heq.
-     * unfold interp_carry; rewrite Zmult_1_l.
+     * rewrite Z.compare_lt_iff in Heq.
+       unfold interp_carry; rewrite Zmult_1_l.
        rewrite -> Z.pow_2_r, Hihl1, Hil2.
        case (Zle_lt_or_eq (φ ih1 + 1) (φ ih)); auto with zarith.
        -- intros H2; contradict Hs2; apply Zle_not_lt.
@@ -1544,7 +1400,8 @@ Lemma sqrt2_spec : forall x y,
           ++ replace (wB + (φ il - φ il1)) with (Φ(WW ih il) - (φ s * φ s)).
              { rewrite <-Hbin in Hs2; auto with zarith. }
              rewrite Hihl1; unfold zn2z_to_Z; rewrite <- H2; ring.
-     * unfold interp_carry.
+     * rewrite Z.compare_lt_iff in Heq.
+       unfold interp_carry.
        case (Zle_lt_or_eq φ ih φ ih1); auto with zarith; intros H.
        -- contradict Hs1.
           apply Zlt_not_le; rewrite Z.pow_2_r, Hihl1.
@@ -1569,7 +1426,8 @@ Lemma sqrt2_spec : forall x y,
        apply Z.le_trans with (wB/4 - 1); auto with zarith. }
      case_eq (ih1 <? ih - 1)%uint63;  [idtac | rewrite <- not_true_iff_false];
        rewrite ltb_spec, Hsih; intros Heq.
-     * rewrite Z.pow_2_r, Hihl1.
+     * rewrite Z.compare_lt_iff in Heq.
+       rewrite Z.pow_2_r, Hihl1.
        case (Zle_lt_or_eq (φ ih1 + 2) φ ih); auto with zarith.
        -- intros H2; contradict Hs2; apply Zle_not_lt.
           replace ((φ s + 1) ^ 2) with (Φ(WW ih1 il1) + 2 * φ s + 1).
@@ -1595,7 +1453,8 @@ Lemma sqrt2_spec : forall x y,
              unfold zn2z_to_Z; rewrite <-H2.
              replace φ il with ((φ il - φ il1) + φ il1); try ring.
              rewrite <-Hil2; ring.
-     * case (Zle_lt_or_eq (φ ih - 1) (φ ih1)); auto with zarith; intros H1.
+     * rewrite Z.compare_lt_iff in Heq.
+       case (Zle_lt_or_eq (φ ih - 1) (φ ih1)); auto with zarith; intros H1.
        -- assert (He: φ ih = φ ih1). {
             apply Zle_antisym; auto with zarith.
             case (Zle_or_lt φ ih1 φ ih); auto; intros H2.
