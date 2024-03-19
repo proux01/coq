@@ -1,13 +1,30 @@
 Information for external library / Coq plugin authors
 -----------------------------------------------------
 
-You are encouraged to consider submitting your project for addition to
-Coq's CI. This means that:
+When developing a library exercizing specific features of Coq and if
+you are willing to maintain a version of your development compiling
+with the master branch of Coq, you can consider submitting your
+project for addition to Coq's CI.
+
+Additionally, OCaml-plugin authors are encouraged to consider
+submitting their plugin. The OCaml API of Coq being rather unstable,
+that remains the best way to maintain a plugin. Note however that,
+thanks to modern metalanguages like Elpi, Ltac2 or Metacoq, there
+should be less and less need for OCaml plugins.
+
+This means that:
 
 - Any time that a proposed change is breaking your project, Coq
-  developers and contributors will send you patches to adapt it or
-  will explain how to adapt it and work with you to ensure that you
-  manage to do it.
+  developers and contributors will get the opportunity to fix their
+  proposal before integration, thus reducing the risk for your
+  development to suffer some new Coq bug at the next stable release.
+
+- When breaking changes are nevertheless needed, you will be informed
+  early and get the opportunity to discuss it with Coq developers,
+  before the change even lands in a stable release. You will also
+  receive advices on how to adapt your development. In the particular
+  case of OCaml plugins, Coq developers will send you patches to adapt
+  your plugin.
 
 On the condition that:
 
@@ -17,33 +34,70 @@ On the condition that:
 - Your project is publicly available in a git repository and we can easily
   send patches to you (e.g. through pull / merge requests).
 
-- You react in a timely manner to discuss / integrate those patches.
-  When seeking your help for preparing such patches, we will accept
-  that it takes longer than when we are just requesting to integrate a
-  simple (and already fully prepared) patch.
+- You react in a timely manner to adapt to the few requested changes
+  required by Coq developers (in a 60 days timeframe) or to integrate their patches.
 
 - You do not push, to the branches that we test, commits that haven't been
-  first tested to compile with the corresponding branch(es) of Coq.
-
-  For that, we recommend setting a CI system for you project, see
+  first tested to compile with the corresponding branch(es) of Coq and
+  upstream or downstream dependencies that are tested in Coq CI.
+  For that, we recommend setting a CI system for you project, see for instance
   [supported CI images for Coq](#supported-ci-images-for-coq) below.
 
 - You maintain a reasonable build time for your project, or you provide
   a "lite" target that we can use.
+  In practice, this means consistently compiling on CI runners in less
+  than one hour and 4GB of memory. The timeout can be raised to 1h30
+  in exceptionnal cases.
 
 - You keep points-of-contact up to date.
 
-In case you forget to comply with these last four conditions, we would reach
+In case you forget to comply with these conditions, we would reach
 out to you and give you a 30-day grace period during which your project
 would be moved into our "allow failure" category. At the end of the grace
 period, in the absence of progress, the project would be removed from our
 CI.
 
-### Timely merging of overlays
+### Dependencies
+
+When a project A depends on a project B, to be in Coq CI, projects A
+and B must fullfill the following conditions:
+
+- Before A enters Coq CI, B must already be tested there. Let's call
+  ``coq-masterB`` the branch of B tested in Coq CI (it can be the
+  ``master`` branch of B or any other branch).
+
+- A must provide a git *branch*, let's call it ``coq-masterA`` (but it
+  can be ``master`` or any other branch) to be tested in Coq CI. That
+  branch will receive overlays needed to maintain compatibility with
+  Coq master.
+
+- The CI of A must ensure that any change to ``coq-masterA`` doesn't
+  break compilation on top of the ``master`` branch of Coq and the
+  ``coq-masterB`` branch of B.
+
+- The CI of B must ensure that any change to ``coq-masterB`` doesn't
+  break compilation of ``coq-masterA``.
+
+It is essential that ``coq-masterA`` is a git *branch* that can
+receive the overlays, not a fixed commit hash that would be somehow
+hardcoded. There are two common choices for ``coq-masterA``:
+- for libraries with only .v files, ``master`` is usually a good choice
+- for OCaml plugins, it can be more convenient to dedicate a specific
+  ``coq-master`` branch to Coq CI whereas usual development is pursued
+  in the ``master`` branch on top of the last stable Coq release. The
+  two branches can then be periodically merged, for instance upon new
+  Coq releases.
+
+When A and B are both Coq developments, A should not vendor B. That is
+B must be its own CI entry, enabling it to receive its own overlays.
+
+### Timely merging of synchronous overlays
 
 A pitfall of the current CI setup is that when a breaking change is
-merged in Coq upstream, CI for your contrib will be broken until you
-merge the corresponding pull request with the fix for your contribution.
+merged in Coq upstream, CI will be broken until you
+merge the potential corresponding synchronous overlay pull request
+with the fix for your contribution. In practice, this mostly applies
+to OCaml plugins.
 
 As of today, you have to worry about synchronizing with Coq upstream
 every once in a while; we hope we will improve this in the future by

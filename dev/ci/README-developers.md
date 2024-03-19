@@ -2,7 +2,7 @@ Information for developers about the CI system
 ----------------------------------------------
 
 When you submit a pull request (PR) on the Coq GitHub repository, this will
-automatically launch a battery of CI tests. The PR will not be integrated
+launch a battery of CI tests. The PR will not be integrated
 unless these tests pass.
 
 We are currently running tests on the following platforms:
@@ -40,11 +40,40 @@ You can also run one CI target locally (using `make ci-somedev`).
 
 See also [`test-suite/README.md`](../../test-suite/README.md) for information about adding new tests to the test-suite.
 
+### Light and full CI
+
+By default, only a light CI is run, mostly testing only Coq itself.
+Before merging a PR, it must also pass full CI testing multiple third party
+developments. Coqbot can be instructed to launch full CI by Coq maintainers,
+either by setting the "request: full CI" flag on the PR before a push,
+or by commenting `@coqbot run full ci` in the PR.
+
 ### Breaking changes
 
-When your PR breaks an external project we test in our CI, you must
-prepare a patch (or ask someone—possibly the project author—to
-prepare a patch) to fix the project. There is experimental support for
+When your PR breaks external projects we test in our CI, you must
+assess the breakage. If it is a bug your PR introduces, it should be
+fixed.  Otherwise, you must assess the impact of the breakage on a few
+CI entries at the bottom of its hierarchy, typically mathcomp, stdlib
+and stdpp. For legitimate breakages, for instance to remove something
+already deprecated, you must then ask the project maintainers to
+prepare a patch. For plugins, you must prepare yourself an overlay.
+Ultimately, for non-plugin CI projects, the responsibility of
+preparing a patch falls on the project maintainer, but PR writers are
+encouraged to be helpful and may prepare patches themselves to
+facilitate a smooth process of adaptation.
+To ask project maintainers to adapt their development, you can use the
+following template
+
+> @maintainer please update <dev>. You can do so by <instructions on how
+> to update, for instance something like "ensuring compilation with Coq X.Y
+> and option -w +thing-we-are-removing-deprecated", you can also offer a
+> script to help porting if you whish so>
+> If <dev> is not updated in 60 days from now, it will be removed from Coq CI
+> so as to not further delay the current PR.
+
+You can find the maintainers to ping in [ci-basic.sh](./ci-basic.sh).
+
+There is experimental support for
 an improved workflow, see [the next
 section](#experimental-automatic-overlay-creation-and-building), below
 are the steps to manually prepare a patch:
@@ -64,10 +93,11 @@ are the steps to manually prepare a patch:
    can very rarely be made backward compatible and plugins we test will
    generally have a dedicated branch per Coq version.
    You can still open a pull request but the merging will be requested by the
-   developer who merges the PR on Coq. There are plans to improve this, cf.
-   [#6724](https://github.com/coq/coq/issues/6724).
+   developer who merges the PR on Coq.
 
-Moreover your PR must absolutely update the [`CHANGES.md`](../../CHANGES.md) file.
+Moreover, in case of user visible change, your PR must absolutely add a
+changelog entry. Please use [make-changelog.sh](../tools/make-changelog.sh)
+to prepare it.
 
 ### Experimental automatic overlay creation and building
 
