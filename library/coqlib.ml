@@ -20,7 +20,7 @@ let coq = Libnames.coq_string (* "Stdlib" *)
 
 let init_dir = [ coq; "Init"]
 
-let jmeq_module_name = [coq;"Logic";"JMeq"]
+let jmeq_module_name = [coq;"Logic";"Base"; "Stdlib"; "Logic"; "JMeq"]
 
 let find_reference locstr dir s =
   let dp = make_dir dir in
