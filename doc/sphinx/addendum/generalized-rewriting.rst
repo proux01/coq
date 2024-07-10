@@ -974,14 +974,12 @@ on success. It is stronger than the tactic ``fold``.
 
 .. example:: :n:`innermost` and :n:`outermost`
 
-   The type of `Nat.add_comm` is `forall n m : nat, n + m = m + n`.
-
    .. coqtop:: all
 
-      Require Import Stdlib.Arith.Arith.
+      Axiom add_comm : forall n m : nat, n + m = m + n.
       Set Printing Parentheses.
       Goal forall a b c: nat, a + b + c = 0.
-      rewrite_strat innermost Nat.add_comm.
+      rewrite_strat innermost add_comm.
 
    .. coqtop:: none
 
@@ -992,7 +990,7 @@ on success. It is stronger than the tactic ``fold``.
 
    .. coqtop:: all
 
-      rewrite_strat outermost Nat.add_comm.
+      rewrite_strat outermost add_comm.
 
    .. coqtop:: none
 

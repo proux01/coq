@@ -112,16 +112,15 @@ it will create new existential variable(s) when :tacn:`apply` would fail.
 
       .. coqtop:: none reset
 
-         Require Import Arith.
          Goal forall i j, i < j.
          intros.
 
       .. coqtop:: all
 
-         (* Theorem lt_trans : forall n m p, n < m -> m < p -> n < p. *)
+         Axiom lt_trans : forall n m p, n < m -> m < p -> n < p.
 
-         Fail apply Nat.lt_trans.
-         eapply Nat.lt_trans.
+         Fail apply lt_trans.
+         eapply lt_trans.
 
 The :n:`e*` tactics include:
 
@@ -176,15 +175,18 @@ automatically as a side effect of other tactics.
 
    .. coqtop:: reset in
 
-      Require Import Arith.
       Set Printing Goal Names.
+
+      Axiom lt_irrefl : forall x, ~ (x < x).
+      Axiom le_lt_trans : forall n m p, n <= m -> m < p -> n < p.
+
       Goal forall n m, n <= m -> ~ m < n.
 
    .. coqtop:: all
 
       intros x y H1 H2.
-      eapply Nat.lt_irrefl. (* creates ?x : nat as a shelved goal *)
-      eapply Nat.le_lt_trans. (* creates ?m : nat as a shelved goal *)
+      eapply lt_irrefl. (* creates ?x : nat as a shelved goal *)
+      eapply le_lt_trans. (* creates ?m : nat as a shelved goal *)
       Unshelve. (* moves the shelved goals into focus--not needed and usually not done *)
       exact H1. (* resolves the first goal and by side effect ?x and ?m *)
 
@@ -196,12 +198,15 @@ automatically as a side effect of other tactics.
 
    .. coqtop:: reset none
 
-      Require Import Arith.
       Set Printing Goal Names.
+
+      Axiom lt_irrefl : forall x, ~ (x < x).
+      Axiom le_lt_trans : forall n m p, n <= m -> m < p -> n < p.
+
       Goal forall n m, n <= m -> ~ m < n.
       intros x y H1 H2.
-      eapply Nat.lt_irrefl. (* creates ?x : nat as a shelved goal *)
-      eapply Nat.le_lt_trans. (* creates ?m : nat as a shelved goal *)
+      eapply lt_irrefl. (* creates ?x : nat as a shelved goal *)
+      eapply le_lt_trans. (* creates ?m : nat as a shelved goal *)
 
    .. coqtop:: out
 

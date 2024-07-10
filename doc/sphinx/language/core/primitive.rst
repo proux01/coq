@@ -39,8 +39,8 @@ These primitive declarations are regular axioms. As such, they must be trusted a
 
 .. coqtop:: in reset
 
-   From Stdlib Require Import Uint63.
-   Lemma one_minus_one_is_zero : (1 - 1 = 0)%uint63.
+   From Stdlib Require Import PrimInt63 Uint63Axioms.
+   Lemma one_minus_one_is_zero : (sub 1 1 = 0)%uint63.
    Proof. apply eqb_correct; vm_compute; reflexivity. Qed.
 
 .. coqtop:: all
@@ -51,7 +51,7 @@ The reduction machines implement dedicated, efficient rules to reduce the
 applications of these primitive operations.
 
 The extraction of these primitives can be customized similarly to the extraction
-of regular axioms (see :ref:`extraction`). Nonetheless, the :g:`ExtrOCamlInt63`
+of regular axioms. Nonetheless, the :g:`ExtrOCamlInt63`
 module can be used when extracting to OCaml: it maps the Coq primitives to types
 and functions of a :g:`Uint63` module (including signed functions for
 :g:`Sint63` despite the name). That OCaml module is not produced by extraction.
@@ -90,8 +90,6 @@ For instance, the product of two primitive floats can be computed using the
 
 where :g:`Prim2SF` is defined in the :g:`FloatOps` module.
 
-The set of such operators is described in section :ref:`floats_library`.
-
 These primitive declarations are regular axioms. As such, they must be trusted, and are listed by the
 :g:`Print Assumptions` command.
 
@@ -101,7 +99,7 @@ operations, using the floating-point processor operators that are assumed
 to comply with the IEEE 754 standard for floating-point arithmetic.
 
 The extraction of these primitives can be customized similarly to the extraction
-of regular axioms (see :ref:`extraction`). Nonetheless, the :g:`ExtrOCamlFloats`
+of regular axioms. Nonetheless, the :g:`ExtrOCamlFloats`
 module can be used when extracting to OCaml: it maps the Coq primitives to types
 and functions of a :g:`Float64` module. Said OCaml module is not produced by
 extraction. Instead, it has to be provided by the user (if they want to compile
@@ -151,7 +149,7 @@ dedicated, efficient rules to reduce the applications of these primitive
 operations.
 
 The extraction of these primitives can be customized similarly to the extraction
-of regular axioms (see :ref:`extraction`). Nonetheless, the :g:`ExtrOCamlPArray`
+of regular axioms. Nonetheless, the :g:`ExtrOCamlPArray`
 module can be used when extracting to OCaml: it maps the Coq primitives to types
 and functions of a :g:`Parray` module. Said OCaml module is not produced by
 extraction. Instead, it has to be provided by the user (if they want to compile
@@ -207,7 +205,7 @@ dedicated, efficient rules to reduce the applications of these primitive
 operations.
 
 The extraction of these primitives can be customized similarly to the extraction
-of regular axioms (see :ref:`extraction`). Nonetheless, the :g:`ExtrOCamlPString`
+of regular axioms. Nonetheless, the :g:`ExtrOCamlPString`
 module can be used when extracting to OCaml: it maps the Coq primitives to types
 and functions of a :g:`Pstring` module. Said OCaml module is not produced by
 extraction. Instead, it has to be provided by the user (if they want to compile

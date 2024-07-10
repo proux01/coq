@@ -442,7 +442,7 @@ syntax: :n:`let fix @ident {* @binder } := @term in` stands for
 
 Some options of :n:`@fixannot` are only supported in specific constructs.  :n:`fix` and :n:`let fix`
 only support the :n:`struct` option, while :n:`wf` and :n:`measure` are only supported in
-commands such as :cmd:`Fixpoint` (with the :attr:`program` attribute) and :cmd:`Function`.
+commands such as :cmd:`Fixpoint` (with the :attr:`program` attribute) and ``Function``.
 
 .. todo explanation of struct: see text above at the Fixpoint command, also
    see https://github.com/coq/coq/pull/12936#discussion_r510716268 and above.
@@ -454,7 +454,7 @@ Top-level recursive functions
 -----------------------------
 
 This section describes the primitive form of definition by recursion over
-inductive objects. See the :cmd:`Function` command for more advanced
+inductive objects. See the ``Function`` command for more advanced
 constructions.
 
 .. cmd:: Fixpoint @fix_definition {* with @fix_definition }
@@ -1510,8 +1510,6 @@ type.
    .. coqtop:: all
 
       Print eq_rec.
-      Require Extraction.
-      Extraction eq_rec.
 
 An empty definition has no constructors, in that case also,
 elimination on any sort is allowed.

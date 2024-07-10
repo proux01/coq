@@ -44,7 +44,4 @@ to consider:
    :maxdepth: 1
 
    ../../language/coq-library
-   ../../addendum/extraction
-   ../../addendum/miscellaneous-extensions
-   funind
    writing
