@@ -52,10 +52,10 @@ not the vernacular standard library.
 
 Note that in this setup, Coq needs to be started with the -boot and
 -noinit options, as will otherwise fail to find the regular Coq
-prelude, now living in the coq-stdlib package."))
+prelude, now living in the rocq-init package."))
 
 (package
- (name coq-stdlib)
+ (name rocq-init)
  (depends
   (coq-core (= :version)))
  (depopts coq-native)
@@ -71,8 +71,8 @@ project, or the Bedrock verified low-level programming library), the
 formalization of mathematics (e.g. the full formalization of the
 Feit-Thompson theorem or homotopy type theory) and teaching.
 
-This package includes the Coq Standard Library, that is to say, the
-set of modules usually bound to the Coq.* namespace."))
+This package includes the Coq prelude, that is to say,
+some of the modules usually bound to the Stdlib.* namespace."))
 
 (package
  (name coqide-server)
@@ -125,7 +125,7 @@ This package provides the Coq Reference Manual."))
  (name coq)
  (depends
   (coq-core (= :version))
-  (coq-stdlib (= :version))
+  (rocq-init (= :version))
   (coqide-server (= :version))
   (ounit2 :with-test)
   (conf-python-3 :with-test)

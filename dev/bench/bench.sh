@@ -426,13 +426,13 @@ create_opam() {
 
     if [ ! -z "$coq_native" ]; then opam install coq-native; fi
 
-    for package in coq-core coq-stdlib coqide-server coq; do
+    for package in coq-core rocq-init coqide-server coq; do
         export COQ_OPAM_PACKAGE=$package
         export COQ_ITERATION=1
 
         # build stdlib with -j 1 to get nicer timings
         local this_nproc=$number_of_processors
-        if [ "$package" = coq-stdlib ]; then this_nproc=1; fi
+        if [ "$package" = rocq-init ]; then this_nproc=1; fi
 
         _RES=0
         opam pin add -y -b -j "$this_nproc" --kind=path $package.$COQ_VER . \
@@ -469,7 +469,7 @@ old_coq_commit_long="$COQ_HASH_LONG"
 
 # Packages which appear in the rendered table
 # Deliberately don't include the "coqide-server" and "coq" packages
-installable_coq_opam_packages="coq-core coq-stdlib"
+installable_coq_opam_packages="coq-core rocq-init"
 
 echo "DEBUG: $render_results $log_dir $num_of_iterations $new_coq_commit_long $old_coq_commit_long 0 user_time_pdiff $installable_coq_opam_packages"
 rendered_results="$($render_results "$log_dir" $num_of_iterations $new_coq_commit_long $old_coq_commit_long 0 user_time_pdiff $installable_coq_opam_packages)"
@@ -486,20 +486,20 @@ format_vosize() {
 
 # HTML for stdlib
 # NB: unlike coq_makefile packages, stdlib produces foo.timing not foo.v.timing
-new_base_path=$new_opam_root/ocaml-NEW/.opam-switch/build/coq-stdlib.dev/_build/default/theories/
-old_base_path=$old_opam_root/ocaml-OLD/.opam-switch/build/coq-stdlib.dev/_build/default/theories/
+new_base_path=$new_opam_root/ocaml-NEW/.opam-switch/build/rocq-init.dev/_build/default/theories/
+old_base_path=$old_opam_root/ocaml-OLD/.opam-switch/build/rocq-init.dev/_build/default/theories/
 for vo in $(cd $new_base_path/; find . -name '*.vo'); do
     if [ -e $old_base_path/$vo ]; then
         format_vosize "$coq_opam_package/$vo" "$old_base_path/$vo" "$new_base_path/$vo" >> "$log_dir/vosize.log"
     fi
     if [ -e $old_base_path/${vo%%.vo}.timing ] && \
            [ -e $new_base_path/${vo%%.vo}.timing ]; then
-        mkdir -p $working_dir/html/coq-stdlib/$(dirname $vo)/
+        mkdir -p $working_dir/html/rocq-init/$(dirname $vo)/
         # NB: sometimes randomly fails
         $timelog2html $new_base_path/${vo%%o} \
                       $old_base_path/${vo%%.vo}.timing \
                       $new_base_path/${vo%%.vo}.timing > \
-                      $working_dir/html/coq-stdlib/${vo%%o}.html ||
+                      $working_dir/html/rocq-init/${vo%%o}.html ||
             echo "Failed (code $?):" $timelog2html $new_base_path/${vo%%o} \
                  $old_base_path/${vo%%.vo}.timing \
                  $new_base_path/${vo%%.vo}.timing

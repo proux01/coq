@@ -90,16 +90,16 @@ help-install:
 	@echo ""
 	@echo " $$ ./configure -prefix <install_prefix>"
 	@echo " $$ make dunestrap"
-	@echo " $$ dune build -p coq-core,coq-stdlib"
-	@echo " $$ dune install --prefix=<install_prefix> coq-core coq-stdlib"
+	@echo " $$ dune build -p coq-core,rocq-init"
+	@echo " $$ dune install --prefix=<install_prefix> coq-core rocq-init"
 	@echo ""
 	@echo " Provided opam/dune packages are:"
 	@echo ""
 	@echo "  - coq-core: base Coq package, toplevel compilers, plugins, tools, no stdlib, no GTK"
-	@echo "  - coq-stdlib: Coq's standard library"
+	@echo "  - rocq-init: Coq's prelude and basis of standard library"
 	@echo "  - coqide-server: XML protocol language server"
 	@echo "  - coqide: CoqIDE gtk application"
-	@echo "  - coq: meta package depending on coq-core coq-stdlib"
+	@echo "  - coq: meta package depending on coq-core rocq-init"
 	@echo ""
 	@echo " To build a package, you can use:"
 	@echo ""
@@ -145,7 +145,7 @@ dunestrap: $(DUNE_FILES)
 states: dunestrap
 	dune build $(DUNEOPT) dev/shim/coqtop
 
-NONDOC_INSTALL_TARGETS:=coq-core.install coq-stdlib.install coqide-server.install coqide.install coq.install
+NONDOC_INSTALL_TARGETS:=coq-core.install rocq-init.install coqide-server.install coqide.install coq.install
 
 world: dunestrap
 	dune build $(DUNEOPT) $(NONDOC_INSTALL_TARGETS)
