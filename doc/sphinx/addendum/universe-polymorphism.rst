@@ -611,7 +611,7 @@ Printing universes
    If :n:`@string` is a relative filename, it refers to the directory
    specified by the command line option `-output-directory`, if set
    (see :ref:`command-line-options`) and otherwise, the current
-   directory. Use :cmd:`Pwd` to display the current directory.
+   directory. Use ``Pwd`` to display the current directory.
 
 Polymorphic definitions
 ~~~~~~~~~~~~~~~~~~~~~~~

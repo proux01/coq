@@ -153,22 +153,9 @@ Numbers
   this is a convenient representation for doing proofs, computing with large
   :n:`nat`\s can lead to stack overflows or running out of memory.  You can
   explicitly specify a different interpretation to avoid this problem.  For
-  example, :n:`1000000%Z` is a more efficient binary representation of
-  that number as an integer.  See :ref:`Scopes` and :n:`@term_scope`.
-
-   .. example:: Stack overflow with :n:`nat`
-
-      .. coqtop:: all reset
-
-         Fail Eval compute in 100000 + 100000.  (* gives a stack overflow (not shown) *)
-
-      .. coqtop:: in
-
-         Require Import ZArith.  (* for definition of Z *)
-
-      .. coqtop:: all
-
-         Eval compute in (1000000000000000000000000000000000 + 1)%Z.
+  example, the standard library enables to write :n:`1000000%Z` for a more
+  efficient binary representation of that number as an integer.
+  See :ref:`Scopes` and :n:`@term_scope` for the ``%`` notation.
 
 Strings
   Strings begin and end with ``"`` (double quote).  Use ``""`` to represent
@@ -527,7 +514,7 @@ more precise description of the scope of these settings):
 * A :gdef:`flag` has a boolean value, such as :flag:`Universe Polymorphism`.
 * An :gdef:`option` generally has a numeric or string value, such as :opt:`Firstorder Depth`.
 * A :gdef:`table` contains a set of :token:`string`\s or :token:`qualid`\s.
-* In addition, some commands provide settings, such as :cmd:`Extraction Language`.
+* In addition, some commands provide settings, such as ``Extraction Language``.
 
 .. FIXME Convert "Extraction Language" to an option.
 
