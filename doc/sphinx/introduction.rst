@@ -12,7 +12,7 @@ mathematical formalizations).
 Users generate proofs by entering a series of tactics that constitute
 steps in the proof.  There are many built-in tactics, some of which
 are elementary, while others implement complex decision procedures
-(such as :tacn:`lia`, a decision procedure for linear integer
+(such as ``lia``, a decision procedure for linear integer
 arithmetic).  :ref:`Ltac <ltac>` and its planned replacement,
 :ref:`Ltac2 <ltac2>`, provide languages to define new tactics by
 combining existing tactics with looping and conditional constructs.
