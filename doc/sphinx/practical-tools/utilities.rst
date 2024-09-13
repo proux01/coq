@@ -243,7 +243,7 @@ The `<>` in the final entry represents an empty logical pathname, which
 permits loading files from the
 associated directory with just the basename of the script file,
 e.g. specify `Foo` to load `Foo.vo`.  This entry corresponds to the
-current directory when Coq was started.  Note that the :cmd:`Cd` command
+current directory when Coq was started.  Note that the ``Cd`` command
 doesn't change the associated directory--you would need to restart CoqIDE.
 
 With some exceptions noted below, the :term:`load path` is generated from files loaded

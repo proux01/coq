@@ -1359,9 +1359,8 @@ You can make them accessible in Ltac2 with commands similar to the following:
 
 .. coqtop:: in
 
-   From Stdlib Require Import Lia.
-   Local Ltac2 lia_ltac1 () := ltac1:(lia).
-   Ltac2 Notation "lia" := lia_ltac1 ().
+   Local Ltac2 admit_ltac1 () := ltac1:(admit).
+   Ltac2 Notation "admit" := admit_ltac1 ().
 
 A similar approach can be used to access missing built-in tactics.  See :ref:`simple_api` for an
 example that passes two parameters to a missing build-in tactic.

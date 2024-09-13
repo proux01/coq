@@ -22,7 +22,7 @@ We highlight some of the most impactful changes here:
 
   - :ref:`rewrite_rules`
 
-  - :ref:`primitive strings <pstring_library>`
+  - `primitive strings <https://github.com/coq/coq/pull/18973>`_
 
   - A lot of work went into reducing the size of the bytecode segment,
     which in turn means that .vo files might now be considerably
@@ -311,7 +311,7 @@ Tactics
 ^^^^^^^
 
 - **Changed:**
-  When using :g:`Z.to_euclidean_division_equations`, :tacn:`nia` can now relate
+  When using :g:`Z.to_euclidean_division_equations`, ``nia`` can now relate
   :g:`Z.div`/:g:`Z.modulo` to :g:`Z.quot`/:g:`Z.rem` a bit better, by virtue of being
   noticing when there are two equations of the form ``x = y * q₁ + _`` and
   ``x = y * q₂ + _`` (or minor variations thereof), suggesting that ``q₁ = q₂``.
@@ -619,9 +619,9 @@ Commands and options
   (`#19069 <https://github.com/coq/coq/pull/19069>`_,
   by Gaëtan Gilbert).
 - **Deprecated:**
-  The :cmd:`Cd` command.  Instead use the command line option
+  The ``Cd`` command.  Instead use the command line option
   `-output-directory` (see :ref:`command-line-options`) or, for
-  extraction, :opt:`Extraction Output Directory`
+  extraction, ``Extraction Output Directory``
   (`#17403 <https://github.com/coq/coq/pull/17403>`_,
   by Ali Caglayan and Hugo Herbelin).
 - **Added:**
@@ -930,7 +930,7 @@ Standard library
   by Pierre Rousselin).
 - **Fixed:**
   :g:`Z.euclidean_division_equations_cleanup` has been reordered so that
-  :tacn:`zify` (and :tacn:`lia`, :tacn:`nia`, etc) are no longer as slow when the
+  ``zify`` (and ``lia``, ``nia``, etc) are no longer as slow when the
   context contains many assumptions of the form :g:`0 <= ... < ...`
   (`#18818 <https://github.com/coq/coq/pull/18818>`_,
   fixes `#18770 <https://github.com/coq/coq/issues/18770>`_,
@@ -1486,7 +1486,7 @@ Commands and options
   and `#17805 <https://github.com/coq/coq/issues/17805>`_,
   by Gaëtan Gilbert).
 - **Added:**
-  :opt:`Extraction Output Directory` option for specifying the
+  ``Extraction Output Directory`` option for specifying the
   directory in which extracted files are written
   (`#16126 <https://github.com/coq/coq/pull/16126>`_,
   fixes `#9148 <https://github.com/coq/coq/issues/9148>`_,
@@ -1557,7 +1557,7 @@ Standard library
 ^^^^^^^^^^^^^^^^
 
 - **Changed:**
-  reimplemented `Ncring_tac` reification (used by :tacn:`nsatz`, `cring`, but not :tacn:`ring`)
+  reimplemented `Ncring_tac` reification (used by `nsatz`, `cring`, but not ``ring``)
   in Ltac instead of typeclasses
   (`#18325 <https://github.com/coq/coq/pull/18325>`_,
   by Gaëtan Gilbert).
@@ -2018,7 +2018,7 @@ Tactics
   (`#17564 <https://github.com/coq/coq/pull/17564>`_,
   by Pierre-Marie Pédrot).
 - **Fixed:**
-  the :tacn:`field_simplify` tactic, so that it no longer
+  the ``field_simplify`` tactic, so that it no longer
   introduces side-conditions when working on a hypothesis
   (`#17591 <https://github.com/coq/coq/pull/17591>`_,
   by Guillaume Melquiond).
@@ -3039,7 +3039,7 @@ Commands and options
   fixes `#12575 <https://github.com/coq/coq/issues/12575>`_,
   by Gaëtan Gilbert).
 - **Fixed:**
-  Anomaly instead of regular error on unsupported applied :g:`fix` in :cmd:`Function`
+  Anomaly instead of regular error on unsupported applied :g:`fix` in ``Function``
   (`#17113 <https://github.com/coq/coq/pull/17113>`_,
   fixes `#17110 <https://github.com/coq/coq/issues/17110>`_,
   by Hugo Herbelin).
@@ -3301,7 +3301,7 @@ with a few new features. We highlight some of the most impactful changes here:
 
   - Standard library :ref:`reorganization and deprecations <816Stdlib>`.
 
-  - Improve the treatment of standard library numbers by :cmd:`Extraction`.
+  - Improve the treatment of standard library numbers by ``Extraction``.
 
 See the `Changes in 8.16.0`_ section below for the detailed list of changes,
 including potentially breaking changes marked with **Changed**.
@@ -3567,7 +3567,7 @@ Tactics
   and `#15279 <https://github.com/coq/coq/issues/15279>`_,
   by Matthieu Sozeau helped by Ali Caglayan).
 - **Added:**
-  Tactics to obtain a micromega :term:`cone expression` (aka witness)
+  Tactics to obtain a micromega cone expression (aka witness)
   from an already reified goal.
   Using those tactics, the user can develop their own micromega tactics
   for their own types, using their own parsers
@@ -3657,7 +3657,7 @@ Commands and options
   by Gaëtan Gilbert).
 - **Removed:**
   `Simplex` flag, that was deprecated in 8.14.
-  :tacn:`lia` and :tacn:`lra` will always use the simplex solver (that was already the default behaviour)
+  ``lia`` and ``lra`` will always use the simplex solver (that was already the default behaviour)
   (`#15690 <https://github.com/coq/coq/pull/15690>`_,
   by Frédéric Besson).
 - **Deprecated:**
@@ -4267,7 +4267,7 @@ Tactics
   fixes `#15300 <https://github.com/coq/coq/issues/15300>`_,
   by Pierre-Marie Pédrot).
 - **Added:**
-  The :tacn:`zify` tactic can now recognize `Pos.Nsucc_double`, `Pos.Ndouble`,
+  The ``zify`` tactic can now recognize `Pos.Nsucc_double`, `Pos.Ndouble`,
   `N.succ_double`, `N.double`, `N.succ_pos`, `N.div2`, `N.pow`, `N.square`, and
   `Z.to_pos`. Moreover, importing module `ZifyBool` lets it recognize `Pos.eqb`,
   `Pos.leb`, `Pos.ltb`, `N.eqb`, `N.leb`, and `N.ltb`
@@ -5129,7 +5129,7 @@ Tactics
   Use `lia` instead
   (`#13741 <https://github.com/coq/coq/pull/13741>`_,
   by Jim Fehrle, who addressed the final details, building on much work by
-  Frédéric Besson, who greatly improved :tacn:`lia`, Maxime Dénès,
+  Frédéric Besson, who greatly improved ``lia``, Maxime Dénès,
   Vincent Laporte and with the help of many package maintainers, among others).
 - **Removed:**
   convert_concl_no_check.  Use :tacn:`change_no_check` instead
@@ -5159,7 +5159,7 @@ Tactics
   (`#14528 <https://github.com/coq/coq/pull/14528>`_,
   by Pierre-Marie Pédrot).
 - **Added:**
-  :tacn:`lia` supports the boolean operator `Bool.implb` (`#13715 <https://github.com/coq/coq/pull/13715>`_, by Frédéric Besson).
+  ``lia`` supports the boolean operator `Bool.implb` (`#13715 <https://github.com/coq/coq/pull/13715>`_, by Frédéric Besson).
 - **Added:**
   ``zify`` (``lia``/``nia``) support for :g:`div`, :g:`mod`, :g:`pow`
   for :g:`Nat` (via ``ZifyNat`` module) and :g:`N` (via ``ZifyN`` module).
@@ -5732,14 +5732,14 @@ Commands and options
 ^^^^^^^^^^^^^^^^^^^^
 
 - **Fixed:**
-  anomaly with :flag:`Extraction Conservative Types` when extracting
+  anomaly with ``Extraction Conservative Types`` when extracting
   pattern-matching on singleton types
   (`#14669 <https://github.com/coq/coq/pull/14669>`_,
   fixes `#3527 <https://github.com/coq/coq/issues/3527>`_,
   by Hugo Herbelin).
 - **Fixed:**
-  a regular error instead of an anomaly when calling :cmd:`Separate
-  Extraction` in a module
+  a regular error instead of an anomaly when calling ``Separate
+  Extraction`` in a module
   (`#14670 <https://github.com/coq/coq/pull/14670>`_,
   fixes `#10796 <https://github.com/coq/coq/issues/10796>`_,
   by Hugo Herbelin).
@@ -5778,7 +5778,7 @@ The main changes include:
     including number notations, recursive notations and notations with bindings.
     A new algorithm chooses the most precise notation available to print an expression,
     which might introduce changes in printing behavior.
-  - Tactic :ref:`improvements <813Tactics>` in :tacn:`lia` and its :tacn:`zify` preprocessing step,
+  - Tactic :ref:`improvements <813Tactics>` in ``lia`` and its ``zify`` preprocessing step,
     now supporting reasoning on boolean operators such as :g:`Z.leb` and supporting
     primitive integers :g:`Int63`.
   - Typing flags can now be specified :ref:`per-constant / inductive <813TypingFlags>`.
@@ -6093,7 +6093,7 @@ Notations
   (`#12979 <https://github.com/coq/coq/pull/12979>`_,
   by Pierre Roux).
 - **Added:**
-  :flag:`Printing Float` flag to print primitive floats as hexadecimal
+  ``Printing Float`` flag to print primitive floats as hexadecimal
   instead of decimal values. This is included in the :flag:`Printing All` flag
   (`#11986 <https://github.com/coq/coq/pull/11986>`_,
   by Pierre Roux).
@@ -6189,7 +6189,7 @@ Tactics
   (`#13381 <https://github.com/coq/coq/pull/13381>`_,
   by Jim Fehrle).
 - **Added:**
-  :tacn:`lia` is extended to deal with boolean operators e.g. `andb` or `Z.leb`
+  ``lia`` is extended to deal with boolean operators e.g. `andb` or `Z.leb`
   (as `lia` gets more powerful, this may break proof scripts relying on `lia` failure,
   `#11906 <https://github.com/coq/coq/pull/11906>`_,  by Frédéric Besson).
 - **Added:**
@@ -6198,11 +6198,11 @@ Tactics
   by Hugo Herbelin; grants
   `#9816 <https://github.com/coq/coq/pull/9816>`_).
 - **Added:**
-  The :tacn:`zify` tactic can now be extended by redefining the `zify_pre_hook`
+  The ``zify`` tactic can now be extended by redefining the `zify_pre_hook`
   tactic. (`#12552 <https://github.com/coq/coq/pull/12552>`_,
   by Kazuhiko Sakaguchi).
 - **Added:**
-  The :tacn:`zify` tactic provides support for primitive integers (module :g:`ZifyInt63`)
+  The ``zify`` tactic provides support for primitive integers (module :g:`ZifyInt63`)
   (`#12648 <https://github.com/coq/coq/pull/12648>`_,  by Frédéric Besson).
 - **Fixed:**
   Avoid exposing an internal name of the form :n:`_tmp` when applying the
@@ -6261,7 +6261,7 @@ Commands and options
   (`#13139 <https://github.com/coq/coq/pull/13139>`_,
   by Pierre-Marie Pédrot).
 - **Removed:**
-  In the :cmd:`Extraction Language` command, remove `Ocaml` as a valid value.
+  In the ``Extraction Language`` command, remove `Ocaml` as a valid value.
   Use `OCaml` instead.  This was deprecated in Coq 8.8, `#6261 <https://github.com/coq/coq/pull/6261>`_
   (`#13016 <https://github.com/coq/coq/pull/13016>`_, by Jim Fehrle).
 
@@ -6377,7 +6377,7 @@ Standard library
   (`#12801 <https://github.com/coq/coq/pull/12801>`_,
   by Vincent Semeria).
 - **Changed:**
-  ``Require Import Coq.nsatz.NsatzTactic`` now allows using :tacn:`nsatz`
+  ``Require Import Coq.nsatz.NsatzTactic`` now allows using ``nsatz``
   with `Z` and `Q` without having to supply instances or using ``Require Import Coq.nsatz.Nsatz``, which
   transitively requires unneeded files declaring axioms used in the reals
   (`#12861 <https://github.com/coq/coq/pull/12861>`_,
@@ -6516,7 +6516,7 @@ The main changes include:
   in most but not all chapters.
 
 Additionally, the `omega` tactic is deprecated in this version of Coq,
-and we recommend users to switch to :tacn:`lia` in new proof scripts.
+and we recommend users to switch to ``lia`` in new proof scripts.
 
 See the `Changes in 8.12+beta1`_ section and following sections for the
 detailed list of changes, including potentially breaking changes marked
@@ -6781,7 +6781,7 @@ Tactics
   <https://github.com/coq/coq/pull/10760>`_, by Jason Gross).
 - **Changed:**
   The :g:`auto with zarith` tactic and variations (including
-  :tacn:`intuition`) may now call :tacn:`lia` instead of `omega`
+  :tacn:`intuition`) may now call ``lia`` instead of `omega`
   (when the `Omega` module is loaded); more goals may be automatically
   solved, fewer section variables will be captured spuriously
   (`#11018 <https://github.com/coq/coq/pull/11018>`_,
@@ -6803,7 +6803,7 @@ Tactics
   Improve the efficiency of `PreOmega.elim_let` using an iterator implemented in OCaml
   (`#11370 <https://github.com/coq/coq/pull/11370>`_, by Frédéric Besson).
 - **Changed:**
-  Improve the efficiency of :tacn:`zify` by rewriting the remaining Ltac code in OCaml
+  Improve the efficiency of ``zify`` by rewriting the remaining Ltac code in OCaml
   (`#11429 <https://github.com/coq/coq/pull/11429>`_, by Frédéric Besson).
 - **Changed:**
   Backtrace information for tactics has been improved
@@ -6847,7 +6847,7 @@ Tactics
   `#4925 <https://github.com/coq/coq/issues/4925>`_
   and `#11727 <https://github.com/coq/coq/issues/11727>`_).
 - **Changed**
-  When the tactic :tacn:`functional induction` :n:`c__1 c__2 ... c__n` is used
+  When the tactic ``functional induction`` :n:`c__1 c__2 ... c__n` is used
   with no parenthesis around :n:`c__1 c__2 ... c__n`, :n:`c__1 c__2 ... c__n` is now
   read as one single applicative term. In particular implicit
   arguments should be omitted. Rare source of incompatibility
@@ -6861,7 +6861,7 @@ Tactics
   fixes `#12365 <https://github.com/coq/coq/issues/12365>`_,
   by Attila Gáspár).
 - **Removed:**
-  Undocumented ``omega with``.  Using :tacn:`lia` is the recommended
+  Undocumented ``omega with``.  Using ``lia`` is the recommended
   replacement, although the old semantics of ``omega with *`` can also
   be recovered with ``zify; omega``
   (`#11288 <https://github.com/coq/coq/pull/11288>`_,
@@ -6878,19 +6878,19 @@ Tactics
   by Attila Gáspár).
 - **Deprecated:**
   The `omega` tactic is deprecated;
-  use :tacn:`lia` from the :ref:`Micromega <micromega>` plugin instead
+  use ``lia`` from the Micromega plugin instead
   (`#11976 <https://github.com/coq/coq/pull/11976>`_,
   by Vincent Laporte).
 - **Added:**
-  The :tacn:`zify` tactic is now aware of `Pos.pred_double`, `Pos.pred_N`,
+  The ``zify`` tactic is now aware of `Pos.pred_double`, `Pos.pred_N`,
   `Pos.of_nat`, `Pos.add_carry`, `Pos.pow`, `Pos.square`, `Z.pow`, `Z.double`,
   `Z.pred_double`, `Z.succ_double`, `Z.square`, `Z.div2`, and `Z.quot2`.
   Injections for internal definitions in module `ZifyBool` (`isZero` and `isLeZero`)
-  are also added to help users to declare new :tacn:`zify` class instances using
+  are also added to help users to declare new ``zify`` class instances using
   Micromega tactics
   (`#10998 <https://github.com/coq/coq/pull/10998>`_, by Kazuhiko Sakaguchi).
 - **Added:**
-  :cmd:`Show Lia Profile` prints some statistics about :tacn:`lia` calls
+  ``Show Lia Profile`` prints some statistics about ``lia`` calls
   (`#11474 <https://github.com/coq/coq/pull/11474>`_,  by Frédéric Besson).
 - **Added:**
   Syntax :tacn:`pose proof` :n:`(@ident:=@term)` as an alternative to
@@ -6903,19 +6903,19 @@ Tactics
   :cmd:`Strategy`, with effects local to the given tactic
   (`#12129 <https://github.com/coq/coq/pull/12129>`_, by Jason Gross).
 - **Added:**
-  The :tacn:`zify` tactic is now aware of `Nat.le`, `Nat.lt` and `Nat.eq`
+  The ``zify`` tactic is now aware of `Nat.le`, `Nat.lt` and `Nat.eq`
   (`#12213 <https://github.com/coq/coq/pull/12213>`_, by Frédéric Besson;
   fixes `#12210 <https://github.com/coq/coq/issues/12210>`_).
 - **Fixed:**
-  :tacn:`zify` now handles :g:`Z.pow_pos` by default.
+  ``zify`` now handles :g:`Z.pow_pos` by default.
   In Coq 8.11, this was the case only when loading module
-  :g:`ZifyPow` because this triggered a regression of :tacn:`lia`.
+  :g:`ZifyPow` because this triggered a regression of ``lia``.
   The regression is now fixed, and the module kept only for compatibility
   (`#11362 <https://github.com/coq/coq/pull/11362>`_,
   fixes `#11191 <https://github.com/coq/coq/issues/11191>`_,
   by Frédéric Besson).
 - **Fixed:**
-  Efficiency regression of :tacn:`lia`
+  Efficiency regression of ``lia``
   (`#11474 <https://github.com/coq/coq/pull/11474>`_,
   fixes `#11436 <https://github.com/coq/coq/issues/11436>`_,
   by Frédéric Besson).
@@ -6925,7 +6925,7 @@ Tactics
   fixes `#7812 <https://github.com/coq/coq/issues/7812>`_,
   by Attila Gáspár).
 - **Fixed:**
-  Wrong type error in tactic :tacn:`functional induction`
+  Wrong type error in tactic ``functional induction``
   (`#12326 <https://github.com/coq/coq/pull/12326>`_,
   by Pierre Courtieu,
   fixes `#11761 <https://github.com/coq/coq/issues/11761>`_,
@@ -7867,7 +7867,7 @@ The main changes brought by Coq version 8.11 are:
 
 Additionally, while the `omega` tactic is not yet deprecated in
 this version of Coq, it should soon be the case and we already
-recommend users to switch to :tacn:`lia` in new proof scripts.
+recommend users to switch to ``lia`` in new proof scripts.
 
 The ``dev/doc/critical-bugs`` file documents the known critical bugs
 of Coq and affected releases. See the `Changes in 8.11+beta1`_
@@ -7996,8 +7996,8 @@ Changes in 8.11+beta1
   (`#10167 <https://github.com/coq/coq/pull/10167>`_,
   by Georges Gonthier).
 - **Changed:**
-  :cmd:`Function` always opens a proof when used with a ``measure`` or ``wf``
-  annotation, see :ref:`advanced-recursive-functions` for the updated
+  ``Function`` always opens a proof when used with a ``measure`` or ``wf``
+  annotation, see advanced-recursive-functions for the updated
   documentation (`#10215 <https://github.com/coq/coq/pull/10215>`_,
   by Enrico Tassi).
 - **Changed:**
@@ -8089,7 +8089,7 @@ Changes in 8.11+beta1
   the standard injection intropattern syntax (`#9288
   <https://github.com/coq/coq/pull/9288>`_, by Hugo Herbelin).
 - **Changed:**
-  Reimplementation of the :tacn:`zify` tactic. The tactic is more efficient and copes with dependent hypotheses.
+  Reimplementation of the ``zify`` tactic. The tactic is more efficient and copes with dependent hypotheses.
   It can also be extended by redefining the tactic ``zify_post_hook``
   (`#9856 <https://github.com/coq/coq/pull/9856>`_, fixes
   `#8898 <https://github.com/coq/coq/issues/8898>`_,
@@ -8102,11 +8102,11 @@ Changes in 8.11+beta1
   range (`#10318 <https://github.com/coq/coq/pull/10318>`_, by Gaëtan
   Gilbert).
 - **Added:**
-  Flags :flag:`Lia Cache`, :flag:`Nia Cache` and :flag:`Nra Cache`
+  Flags ``Lia Cache``, ``Nia Cache`` and ``Nra Cache``
   (`#10765 <https://github.com/coq/coq/pull/10765>`_, by Frédéric Besson,
   see `#10772 <https://github.com/coq/coq/issues/10772>`_ for use case).
 - **Added:**
-  The :tacn:`zify` tactic is now aware of `Z.to_N`
+  The ``zify`` tactic is now aware of `Z.to_N`
   (`#10774 <https://github.com/coq/coq/pull/10774>`_, grants
   `#9162 <https://github.com/coq/coq/issues/9162>`_, by Kazuhiko Sakaguchi).
 - **Changed:**
@@ -8386,7 +8386,7 @@ Changes in 8.11.0
   <https://github.com/coq/coq/pull/11203>`_, fixes `#10971
   <https://github.com/coq/coq/issues/10971>`_, by Jason Gross)
 - **Fixed:**
-  Efficiency regression of :tacn:`lia` introduced in 8.10
+  Efficiency regression of ``lia`` introduced in 8.10
   by PR `#9725 <https://github.com/coq/coq/pull/9725>`_
   (`#11263 <https://github.com/coq/coq/pull/11263>`_,
   fixes `#11063 <https://github.com/coq/coq/issues/11063>`_,
@@ -8394,12 +8394,12 @@ Changes in 8.11.0
   and `#11270 <https://github.com/coq/coq/issues/11270>`_, by Frédéric Besson).
 - **Deprecated:**
   The undocumented ``omega with`` tactic variant has been deprecated.
-  Using :tacn:`lia` is the recommended replacement, though the old semantics
+  Using ``lia`` is the recommended replacement, though the old semantics
   of ``omega with *`` can be recovered with ``zify; omega``
   (`#11337 <https://github.com/coq/coq/pull/11337>`_,
   by Emilio Jesus Gallego Arias).
 - **Fixed**
-  For compatibility reasons, in 8.11, :tacn:`zify` does not support :g:`Z.pow_pos` by default.
+  For compatibility reasons, in 8.11, ``zify`` does not support :g:`Z.pow_pos` by default.
   It can be enabled by explicitly loading the module :g:`ZifyPow`
   (`#11430 <https://github.com/coq/coq/pull/11430>`_ by Frédéric Besson
   fixes `#11191 <https://github.com/coq/coq/issues/11191>`_).
@@ -8508,7 +8508,7 @@ Changes in 8.11.1
 **Miscellaneous**
 
 - **Fixed:**
-  :cmd:`Extraction Implicit` on the constructor of a record was leading to an anomaly
+  ``Extraction Implicit`` on the constructor of a record was leading to an anomaly
   (`#11329 <https://github.com/coq/coq/pull/11329>`_,
   by Hugo Herbelin, fixes `#11114 <https://github.com/coq/coq/pull/11114>`_).
 
@@ -8637,7 +8637,7 @@ reference manual. Here are the most important user-visible changes:
   and `#7385 <https://github.com/coq/coq/issues/7385>`_,
   by Pierre-Marie Pédrot).
 
-- The tactics :tacn:`lia`, :tacn:`nia`, :tacn:`lra`, :tacn:`nra` are now using a novel
+- The tactics ``lia``, ``nia``, ``lra``, ``nra`` are now using a novel
   Simplex-based proof engine. In case of regression, unset `Simplex`
   to get the venerable Fourier-based engine
   (`#8457 <https://github.com/coq/coq/pull/8457>`_, by Fréderic Besson).
@@ -8954,7 +8954,7 @@ Other changes in 8.10+beta1
   - There are now tactics in `PreOmega.v` called
     `Z.div_mod_to_equations`, `Z.quot_rem_to_equations`, and
     `Z.to_euclidean_division_equations` (which combines the `div_mod`
-    and `quot_rem` variants) which allow :tacn:`lia`, :tacn:`nia`, etc to
+    and `quot_rem` variants) which allow ``lia``, ``nia``, etc to
     support `Z.div` and `Z.modulo` (`Z.quot` and `Z.rem`, respectively),
     by posing the specifying equation for `Z.div` and `Z.modulo` before
     replacing them with atoms
@@ -8980,11 +8980,11 @@ Other changes in 8.10+beta1
     `#10059 <https://github.com/coq/coq/pull/10059>`_,
     by Hugo Herbelin and Paolo G. Giarrusso).
 
-  - The simplified value returned by :tacn:`field_simplify` is not
+  - The simplified value returned by ``field_simplify`` is not
     always a fraction anymore.  When the denominator is :g:`1`, it
     returns :g:`x` while previously it was returning :g:`x/1`.  This
     change could break codes that were post-processing application of
-    :tacn:`field_simplify` to get rid of these :g:`x/1`
+    ``field_simplify`` to get rid of these :g:`x/1`
     (`#9854 <https://github.com/coq/coq/pull/9854>`_,
     by Laurent Théry,
     with help from Michael Soegtrop, Maxime Dénès, and Vincent Laporte).
@@ -9262,7 +9262,7 @@ Changes in 8.10+beta3
 - Fix a printing bug of OCaml extraction on dependent record projections, which
   produced improper `assert false`. This change makes the OCaml extractor
   internally inline record projections by default; thus the monolithic OCaml
-  extraction (:cmd:`Extraction` and :cmd:`Recursive Extraction`) does not
+  extraction (``Extraction`` and ``Recursive Extraction``) does not
   produce record projection constants anymore except for record projections
   explicitly instructed to extract, and records declared in opaque modules
   (`#10577 <https://github.com/coq/coq/pull/10577>`_,
@@ -9280,7 +9280,7 @@ Changes in 8.10+beta3
 Changes in 8.10.0
 ~~~~~~~~~~~~~~~~~
 
-- Micromega tactics (:tacn:`lia`, :tacn:`nia`, etc) are no longer confused by
+- Micromega tactics (``lia``, ``nia``, etc) are no longer confused by
   primitive projections (`#10806 <https://github.com/coq/coq/pull/10806>`_,
   fixes `#9512 <https://github.com/coq/coq/issues/9512>`_
   by Vincent Laporte).
@@ -9298,7 +9298,7 @@ A few bug fixes and documentation improvements, in particular:
 
 **Tactics**
 
-- Fix an anomaly when unsolved evar in :cmd:`Add Ring`
+- Fix an anomaly when unsolved evar in ``Add Ring``
   (`#10891 <https://github.com/coq/coq/pull/10891>`_,
   fixes `#9851 <https://github.com/coq/coq/issues/9851>`_,
   by Gaëtan Gilbert).
@@ -9405,7 +9405,7 @@ changes:
   dependent product rather than failing, by Hugo Herbelin.
 
 - Decision procedures: deprecation of tactic ``romega`` in favor of
-  :tacn:`lia` and removal of ``fourier``, replaced by :tacn:`lra` which
+  ``lia`` and removal of ``fourier``, replaced by ``lra`` which
   subsumes it, by Frédéric Besson, Maxime Dénès, Vincent Laporte and
   Laurent Théry.
 

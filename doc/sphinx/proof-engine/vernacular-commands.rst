@@ -214,14 +214,10 @@ described elsewhere
 
    .. example:: Searching for a pattern
 
-      .. coqtop:: none reset
-
-         Require Import PeanoNat.
-
       We can repeat meta-variables to narrow down the search.  Here,
       we are looking for commutativity lemmas.
 
-      .. coqtop:: all
+      .. coqtop:: all reset
 
          Search (_ ?n ?m = _ ?m ?n).
 
@@ -247,7 +243,7 @@ described elsewhere
 
       .. coqtop:: none reset
 
-         Require Import PeanoNat.
+         Notation "x 'mod' y" := (Nat.modulo x y) (at level 40) : nat_scope.
 
       In this example, we show two ways of searching for all the
       objects whose type contains `Nat.modulo` but which do not
@@ -326,7 +322,7 @@ described elsewhere
 
       .. coqtop:: in
 
-         Require Import Arith.
+         Axiom add_comm: forall n m, n + m = m + n.
 
       .. coqtop:: all
 
@@ -351,7 +347,7 @@ described elsewhere
 
       .. coqtop:: in
 
-         Require Import Arith.
+         Axiom add_assoc: forall n m p, n + (m + p) = n + m + p.
 
       .. coqtop:: all
 
@@ -879,7 +875,7 @@ Quitting and debugging
    If :n:`@string` is a relative filename, it refers to the directory
    specified by the command line option `-output-directory`, if set
    (see :ref:`command-line-options`) and otherwise, the current
-   directory. Use :cmd:`Pwd` to display the current directory.
+   directory. Use ``Pwd`` to display the current directory.
 
 .. cmd:: Timeout @natural @sentence
 
