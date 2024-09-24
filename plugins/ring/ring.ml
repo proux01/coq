@@ -253,15 +253,14 @@ let plapp sigma f args =
 (****************************************************************************)
 (* Library linking *)
 
-let plugin_dir = ["Stdlib"; "setoid_ring"]
+let plugin_dir = "setoid_ring"
 
-let zdir = plugin_dir @ "Z" :: plugin_dir
-let qdir = plugin_dir @ "Q" :: plugin_dir
+let cdir = ["Stdlib";plugin_dir]
 let plugin_modules =
-  List.map (fun d -> zdir@d)
-    [["Ring_theory"];["Ring_polynom"]; ["Ring_tac"];["InitialRing"]]
-  @ List.map (fun d -> qdir@d)
-    [["Field_tac"]; ["Field_theory"]]
+  List.map (fun d -> cdir@d)
+    [["Ring_theory"];["Ring_polynom"]; ["Ring_tac"];["InitialRing"];
+     ["Field_tac"]; ["Field_theory"]
+    ]
 
 let my_constant c =
   lazy (EConstr.of_constr (UnivGen.constr_of_monomorphic_global (Global.env ()) @@ Coqlib.gen_reference_in_modules "Ring" plugin_modules c))
@@ -271,12 +270,12 @@ let my_reference c =
     [@@ocaml.warning "-3"]
 
 let znew_ring_path =
-  DirPath.make (List.map Id.of_string (List.rev (zdir @ ["InitialRing"])))
+  DirPath.make (List.map Id.of_string ["InitialRing";plugin_dir;"Stdlib"])
 let zltac s =
   lazy(KerName.make (ModPath.MPfile znew_ring_path) (Label.make s))
 
-let mk_cst l s = lazy (Coqlib.find_reference "ring" l s) [@@ocaml.warning "-3"]
-let pol_cst s = mk_cst (zdir @ ["Ring_polynom"]) s
+let mk_cst l s = lazy (Coqlib.coq_reference "ring" l s) [@@ocaml.warning "-3"]
+let pol_cst s = mk_cst [plugin_dir;"Ring_polynom"] s
 
 (* Ring theory *)
 
@@ -579,7 +578,7 @@ let interp_div env sigma div =
        (* Same remark on ill-typed terms ... *)
 
 let add_theory0 env sigma name rth eqth morphth cst_tac (pre,post) power sign div =
-  check_required_library (zdir@["Ring_base"]);
+  check_required_library (cdir@["Ring_base"]);
   let (kind,r,zero,one,add,mul,sub,opp,req) = dest_ring env sigma rth in
   let (sth,ext) = build_setoid_params env sigma r add mul opp req eqth in
   let sigma, (pow_tac, pspec) = interp_power env sigma power in
@@ -716,7 +715,7 @@ let ring_lookup (f : Value.t) lH rl t =
 (***********************************************************************)
 
 let new_field_path =
-  DirPath.make (List.map Id.of_string (List.rev (qdir @ ["Field_tac"])))
+  DirPath.make (List.map Id.of_string ["Field_tac";plugin_dir;"Stdlib"])
 
 let field_ltac s =
   lazy(KerName.make (ModPath.MPfile new_field_path) (Label.make s))
@@ -793,7 +792,7 @@ let print_fields () =
 let field_for_carrier r = Cmap.find r !field_from_carrier
 
 let find_field_structure env sigma l =
-  check_required_library (qdir@["Field_tac"]);
+  check_required_library (cdir@["Field_tac"]);
   match l with
     | t::cl' ->
         let ty = Retyping.get_type_of env sigma t in
@@ -873,7 +872,7 @@ let field_equality env sigma r inv req =
 
 let add_field_theory0 env sigma name fth eqth morphth cst_tac inj (pre,post) power sign odiv =
   let open Constr in
-  check_required_library (qdir@["Field_tac"]);
+  check_required_library (cdir@["Field_tac"]);
   let (sigma,fth) = ic env sigma fth in
   let (kind,r,zero,one,add,mul,sub,opp,div,inv,req,rth) =
     dest_field env sigma fth in
