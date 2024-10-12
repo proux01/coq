@@ -8,6 +8,9 @@
 (*         *     (see LICENSE file for the text of the license)         *)
 (************************************************************************)
 
-(** Compatibility file for making Coq act similar to Coq v8.18 *)
+(* File created for Coq V5.10.14b, Oct 1995 *)
 
-Require Export Stdlib.Compat.Coq819.
+(** Classical Logic *)
+
+Require Export Classical_Prop.
+Require Export Classical_Pred_Type.
